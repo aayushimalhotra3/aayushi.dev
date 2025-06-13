@@ -261,7 +261,7 @@ const Projects = () => {
           {filteredProjects.map((project, index) => (
             <div key={index} data-aos="fade-up"
              data-aos-delay={`${100 + index * 30}`}>
-                  <ProjectCard project={project} />
+                  <ProjectCard project={project} index={index} />
                 </div>
           ))}
         </div>
