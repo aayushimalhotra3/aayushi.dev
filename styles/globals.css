@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    @apply bg-offwhite text-charcoal dark:bg-bg-dark dark:text-text-light transition-colors duration-300;
+  }
+}
+
+@layer components {
+  .section-padding {
+    @apply px-3 sm:px-4 lg:px-6;
+  }
+  
+  .container-max {
+    @apply w-full px-6 md:px-12 lg:px-24;
+  }
+  
+  .btn-primary {
+@apply bg-soft-pink text-charcoal hover:bg-pink-300 dark:bg-butter-yellow dark:text-bg-dark hover:dark:bg-accent-orange px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 inline-flex items-center gap-1.5;
+}
+  
+  .btn-secondary {
+    @apply bg-butter-yellow text-charcoal hover:bg-yellow-200 dark:bg-accent-pink dark:text-text-light hover:dark:bg-accent-lilac border border-pink-200 dark:border-border-dark px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 inline-flex items-center gap-1.5;
+  }
+  
+  .skill-tag {
+    @apply bg-light-lilac text-white dark:bg-accent-lilac dark:text-text-light px-2 py-0.5 rounded-full text-xs font-medium;
+  }
+  
+  .project-card {
+    @apply bg-white/80 dark:bg-bg-card/80 backdrop-blur-sm border border-pink-200 dark:border-border-dark rounded-md p-4 hover:shadow-md transition-all duration-200;
+  }
+}
