@@ -1,10 +1,10 @@
-const isProd = process.env.NODE_ENV === 'production';
-
-module.exports = {
-  output: 'export',
-  distDir: 'docs',
-  basePath: isProd ? '/aayushi' : '',
-  assetPrefix: isProd ? '/aayushi/' : '',
-  trailingSlash: true,
-  images: { unoptimized: true },
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  reactStrictMode: true,
+  swcMinify: true,
+  images: {
+    domains: [],
+  },
 };
+
+module.exports = nextConfig;
