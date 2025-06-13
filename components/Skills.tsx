@@ -15,8 +15,8 @@ const Skills = () => {
     'Leadership', 'Community Building', 'Technical Writing'
   ]
 
-  const getFileIcon = (extension) => {
-    const icons = {
+  const getFileIcon = (extension: string): string => {
+    const icons: Record<string, string> = {
       'py': '🐍',
       'js': '📜',
       'jsx': '⚛️',
