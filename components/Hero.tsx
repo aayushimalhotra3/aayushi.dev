@@ -16,7 +16,7 @@ const Hero = () => {
       {/* Subtle gradient accents */}
       <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-accent-pink/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/3" />
 
-      <div className="max-w-5xl mx-auto px-6 md:px-8 relative z-10 w-full py-28 lg:py-0">
+      <div className="max-w-6xl mx-auto px-6 md:px-8 relative z-10 w-full pt-32 pb-20 lg:pt-28 lg:pb-0">
         <div className="flex flex-col lg:flex-row gap-12 lg:gap-16">
 
           {/* Left sidebar - GitHub profile style */}

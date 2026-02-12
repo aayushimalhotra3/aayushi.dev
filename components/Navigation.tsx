@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import Image from 'next/image'
 import { Menu, X } from 'lucide-react'
 
 const Navigation = () => {
@@ -37,12 +38,19 @@ const Navigation = () => {
         ? 'bg-bg-dark/90 backdrop-blur-md border-b border-border-dark'
         : 'bg-transparent'
     }`}>
-      <div className="max-w-5xl mx-auto px-6 md:px-8">
+      <div className="max-w-6xl mx-auto px-6 md:px-8">
         <div className="flex items-center justify-between h-16">
           <button
             onClick={() => scrollToSection('#hero')}
-            className="text-base font-semibold text-text-light hover:text-accent-pink transition-colors duration-200"
+            className="flex items-center gap-2 text-base font-semibold text-text-light hover:text-accent-pink transition-colors duration-200"
           >
+            <Image
+              src="/laptop.png"
+              alt="Laptop"
+              width={22}
+              height={22}
+              className="transition-transform duration-200 hover:scale-110"
+            />
             aayushi.dev
           </button>
 
