@@ -14,7 +14,7 @@ const ScrollProgressIndicator = () => {
     }
 
     window.addEventListener('scroll', updateScrollProgress)
-    updateScrollProgress() // Initial calculation
+    updateScrollProgress()
 
     return () => {
       window.removeEventListener('scroll', updateScrollProgress)
@@ -22,11 +22,11 @@ const ScrollProgressIndicator = () => {
   }, [])
 
   return (
-    <div className="fixed top-0 left-0 w-full h-2 bg-gray-200 dark:bg-gray-800 z-[9999] shadow-sm">
+    <div className="fixed top-0 left-0 w-full h-[2px] bg-transparent z-[9999]">
       <div
-          className="h-full bg-green-200 transition-all duration-300 ease-out shadow-md"
-          style={{ width: `${scrollProgress}%` }}
-        />
+        className="h-full bg-accent-pink transition-all duration-150 ease-out"
+        style={{ width: `${scrollProgress}%` }}
+      />
     </div>
   )
 }

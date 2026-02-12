@@ -1,8 +1,7 @@
 import React from 'react'
 import Image from 'next/image'
-import { ArrowDown, Mail, Github, Linkedin } from 'lucide-react'
+import { ArrowDown, Mail, Github, Linkedin, FileText } from 'lucide-react'
 import { Typewriter } from 'react-simple-typewriter'
-import NeuralNetworkBackground from './NeuralNetworkBackground'
 
 const Hero = () => {
   const scrollToAbout = () => {
@@ -13,215 +12,128 @@ const Hero = () => {
   }
 
   return (
-    <section id="hero" className="h-screen flex items-center justify-center bg-gradient-to-br from-offwhite to-white dark:from-bg-dark dark:to-bg-section relative overflow-hidden">
-      <NeuralNetworkBackground opacity={0.3} />
-      
-      <div className="w-full h-full px-6 md:px-12 lg:px-24 relative z-10 flex flex-col lg:flex-row items-center lg:items-stretch">
-        {/* Left: Text content */}
-        <div className="w-full lg:w-1/2 space-y-4 text-left mt-36 md:mt-40 lg:mt-44 ml-4 md:ml-6 lg:ml-8" data-aos="fade-up">
-          <h1 className="text-4xl md:text-6xl font-bold text-charcoal dark:text-text-light mb-6">
-            {/* Force greeting + name on one line */}
-            <span className="block whitespace-nowrap">
-              Hi, I'm <span className="text-soft-pink dark:text-accent-pink">Aayushi Malhotra</span>
-            </span>
-            {/* New line for the role, aligned under greeting */}
-            <span className="block">
-              — <span className="text-butter-yellow dark:text-butter-yellow">
+    <section id="hero" className="min-h-screen flex items-center bg-bg-dark relative overflow-hidden">
+      {/* Subtle gradient accents */}
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-accent-pink/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/3" />
+      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-accent-cool/5 rounded-full blur-[100px] translate-y-1/3 -translate-x-1/4" />
+
+      <div className="max-w-5xl mx-auto px-6 md:px-8 relative z-10 w-full py-32 lg:py-0">
+        <div className="flex flex-col lg:flex-row items-center lg:items-center gap-12 lg:gap-16">
+          {/* Left: Text content */}
+          <div className="w-full lg:w-3/5 space-y-6">
+            <div className="space-y-3">
+              <p className="text-accent-pink text-sm font-medium tracking-wide uppercase">
+                Software Engineer
+              </p>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-text-light leading-tight">
+                Hi, I'm{' '}
+                <span className="text-accent-pink">Aayushi</span>
+              </h1>
+              <div className="text-xl md:text-2xl text-text-muted font-light h-8">
                 <Typewriter
                   words={[
-                    'Software Engineer',
-                    'Backend Engineer',
-                    'Frontend Engineer',
-                    'Full-Stack Developer',
-                    'Cloud Engineer',
-                    'DevOps Engineer',
-                    'Data Engineer',
-                    'ML Engineer',
-                    'Security Engineer',
-                    'Platform Engineer'
+                    'building cloud-native apps',
+                    'training ML models',
+                    'crafting clean interfaces',
+                    'automating everything',
                   ]}
                   loop={true}
                   cursor={true}
-                  typeSpeed={80}
-                  deleteSpeed={50}
-                  delaySpeed={1500}
+                  cursorStyle="_"
+                  typeSpeed={70}
+                  deleteSpeed={40}
+                  delaySpeed={2000}
                 />
-              </span>
-            </span>
-          </h1>
-          
-          <p className="text-base md:text-xl text-gray-700 dark:text-text-muted mb-4 leading-relaxed">
-            Crafting scalable, cloud-powered applications with Python and React, I turn complex challenges into impactful solutions through collaboration. Let's work together to build a smarter, more inclusive future.
-          </p>
-          
-          <p className="text-sm md:text-base text-soft-pink dark:text-accent-blue mb-6 font-medium">
-            Currently open to Summer 2025 SWE internships & full-time opportunities.
-          </p>
-          
-          {/* Tech Logo Bar */}
-          <div className="flex items-center justify-start gap-6 mb-8" data-aos="fade-up" data-aos-delay="50">
-            <div className="flex items-center gap-4">
-              {/* Python Logo */}
-              <div className="transform hover:scale-110 transition-transform duration-200 cursor-pointer">
-                <svg width="32" height="32" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                  <rect width="100" height="100" fill="#3776AB" rx="10"/>
-                  <path d="M30 30 Q30 20 40 20 L60 20 Q70 20 70 30 L70 45 Q70 50 65 50 L35 50 Q30 50 30 45 Z" fill="#FFD43B"/>
-                  <path d="M70 70 Q70 80 60 80 L40 80 Q30 80 30 70 L30 55 Q30 50 35 50 L65 50 Q70 50 70 55 Z" fill="#3776AB"/>
-                  <circle cx="40" cy="35" r="3" fill="white"/>
-                  <circle cx="60" cy="65" r="3" fill="#FFD43B"/>
-                </svg>
-              </div>
-              
-              {/* GCP Logo */}
-              <div className="transform hover:scale-110 transition-transform duration-200 cursor-pointer">
-                <svg width="32" height="32" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                  <rect width="100" height="100" fill="#4285F4" rx="10"/>
-                  <path d="M30 40 Q50 25 70 40 Q75 50 70 60 Q50 75 30 60 Q25 50 30 40" fill="white"/>
-                  <text x="50" y="55" fontSize="8" fill="#4285F4" textAnchor="middle" fontFamily="sans-serif" fontWeight="bold">GCP</text>
-                </svg>
-              </div>
-              
-              {/* TensorFlow Logo */}
-              <div className="transform hover:scale-110 transition-transform duration-200 cursor-pointer">
-                <svg width="32" height="32" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                  <rect width="100" height="100" fill="#FF6F00" rx="10"/>
-                  <polygon points="50,20 30,35 30,65 50,80 70,65 70,35" fill="white"/>
-                  <text x="50" y="55" fontSize="8" fill="#FF6F00" textAnchor="middle" fontFamily="sans-serif" fontWeight="bold">TF</text>
-                </svg>
-              </div>
-              
-              {/* React Logo */}
-              <div className="transform hover:scale-110 transition-transform duration-200 cursor-pointer">
-                <svg width="32" height="32" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                  <rect width="100" height="100" fill="#61DAFB" rx="10"/>
-                  <circle cx="50" cy="50" r="8" fill="#20232A"/>
-                  <ellipse cx="50" cy="50" rx="25" ry="10" stroke="#20232A" strokeWidth="2" fill="none"/>
-                  <ellipse cx="50" cy="50" rx="25" ry="10" stroke="#20232A" strokeWidth="2" fill="none" transform="rotate(60 50 50)"/>
-                  <ellipse cx="50" cy="50" rx="25" ry="10" stroke="#20232A" strokeWidth="2" fill="none" transform="rotate(120 50 50)"/>
-                </svg>
-              </div>
-              
-              {/* Docker Logo */}
-              <div className="transform hover:scale-110 transition-transform duration-200 cursor-pointer">
-                <svg width="32" height="32" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                  <rect width="100" height="100" fill="#2496ED" rx="10"/>
-                  <rect x="20" y="45" width="12" height="10" fill="white"/>
-                  <rect x="35" y="45" width="12" height="10" fill="white"/>
-                  <rect x="50" y="45" width="12" height="10" fill="white"/>
-                  <rect x="65" y="45" width="12" height="10" fill="white"/>
-                  <rect x="35" y="32" width="12" height="10" fill="white"/>
-                  <rect x="50" y="32" width="12" height="10" fill="white"/>
-                  <rect x="50" y="19" width="12" height="10" fill="white"/>
-                </svg>
-              </div>
-              
-              {/* Git/GitHub Logo */}
-              <div className="transform hover:scale-110 transition-transform duration-200 cursor-pointer">
-                <svg width="32" height="32" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                  <rect width="100" height="100" fill="#181717" rx="10"/>
-                  <path d="M50 15 C30 15 15 30 15 50 C15 66 25 79 39 84 C41 84 42 83 42 81 L42 75 C35 77 33 72 33 72 C31 70 29 69 29 69 C26 67 29 67 29 67 C32 67 34 70 34 70 C37 75 42 73 42 73 C43 72 44 70 44 70 C44 67 42 65 39 64 C32 63 25 60 25 50 C25 47 26 45 28 43 C28 42 27 39 29 35 C29 35 32 34 42 40 C44 39 47 39 50 39 C53 39 56 39 58 40 C68 34 71 35 71 35 C73 39 72 42 72 43 C74 45 75 47 75 50 C75 60 68 63 61 64 C64 66 66 70 66 75 L66 81 C66 83 67 84 69 84 C75 79 85 66 85 50 C85 30 70 15 50 15 Z" fill="white"/>
-                </svg>
               </div>
             </div>
-          </div>
-          
-          <h2 className="text-xl md:text-2xl text-white dark:text-white mb-8 font-medium" data-aos="fade-up" data-aos-delay="100">
-            Computer Science Major & Cognitive Science Minor
-          </h2>
-          
-          <div className="flex flex-col sm:flex-row items-start gap-3 mb-6" data-aos="fade-up" data-aos-delay="150">
-            <button 
-              onClick={scrollToAbout}
-              className="bg-accent-blue text-charcoal hover:bg-blue-400 dark:bg-accent-blue dark:text-bg-dark hover:dark:bg-blue-300 px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 inline-flex items-center gap-1.5"
-            >
-              Learn More About Me
-              <ArrowDown size={15} />
-            </button>
-            
-            <a 
-              href="#contact" 
-              className="bg-accent-blue text-charcoal hover:bg-blue-400 dark:bg-accent-blue dark:text-bg-dark hover:dark:bg-blue-300 px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 inline-flex items-center gap-1.5 relative z-20"
-              onClick={(e) => {
-                e.preventDefault()
-                const element = document.querySelector('#contact')
-                if (element) {
-                  element.scrollIntoView({ behavior: 'smooth' })
-                }
-              }}
-            >
-              Get In Touch
-              <Mail size={15} />
-            </a>
-            
-            <a 
-              href="/Malhotra, Aayushi Resume.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-accent-blue text-charcoal hover:bg-blue-400 dark:bg-accent-blue dark:text-bg-dark hover:dark:bg-blue-300 px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 inline-flex items-center gap-1.5"
-            >
-              📄 Download Resume
-            </a>
-          </div>
-          
 
-        </div>
-        
-        {/* Right: Magazine‐style cutout image */}
-        <div className="w-full lg:w-1/2 mt-6 lg:mt-0 relative z-10 h-full" data-aos="fade-left" data-aos-delay="100">
-          <div 
-            className="
-              absolute
-              bottom-[-30px]
-              lg:bottom-[-25px]
-              right-2
-              lg:right-4
-              z-10
-              w-auto
-            "
-          >
-            <Image
-              src="/cutout.png"
-              alt="Aayushi Malhotra"
-              width={700}
-              height={950}
-              className="cutout-shadow max-w-[95%] lg:max-w-[90%]"
-              style={{ objectFit: 'contain' }}
-              priority
-            />
+            <p className="text-text-muted text-base md:text-lg leading-relaxed max-w-lg">
+              CS major at Michigan State with a knack for turning complex problems into
+              elegant solutions. I love Python, cloud infra, and the occasional 2 AM
+              debugging session.
+            </p>
+
+            <p className="text-accent-warm text-sm font-medium">
+              Open to Summer 2025 SWE internships & full-time roles
+            </p>
+
+            <div className="flex flex-wrap items-center gap-3 pt-2">
+              <button
+                onClick={scrollToAbout}
+                className="btn-primary"
+              >
+                About Me
+                <ArrowDown size={16} />
+              </button>
+
+              <a
+                href="#contact"
+                className="btn-secondary"
+                onClick={(e) => {
+                  e.preventDefault()
+                  document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })
+                }}
+              >
+                Get In Touch
+              </a>
+
+              <a
+                href="/Malhotra, Aayushi Resume.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-secondary"
+              >
+                <FileText size={16} />
+                Resume
+              </a>
+            </div>
+
+            {/* Social links */}
+            <div className="flex items-center gap-4 pt-4">
+              <a
+                href="https://github.com/aayushimalhotra3"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-text-dim hover:text-text-light transition-colors"
+                aria-label="GitHub"
+              >
+                <Github size={20} />
+              </a>
+              <a
+                href="https://www.linkedin.com/in/aayushimalhotraa"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-text-dim hover:text-text-light transition-colors"
+                aria-label="LinkedIn"
+              >
+                <Linkedin size={20} />
+              </a>
+              <a
+                href="mailto:aayushim33@gmail.com"
+                className="text-text-dim hover:text-text-light transition-colors"
+                aria-label="Email"
+              >
+                <Mail size={20} />
+              </a>
+            </div>
           </div>
-          
-          {/* Social Media Icons - Vertical Stack on Right */}
-          <div className="absolute -right-20 top-3/4 transform -translate-y-2/1 flex flex-col gap-4 z-20" data-aos="fade-up" data-aos-delay="200">
-            <a 
-              href="https://github.com/aayushimalhotra3" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-gray-600 dark:text-text-muted hover:text-soft-pink dark:hover:text-accent-teal transition-colors"
-              aria-label="GitHub Profile"
-            >
-              <Github size={28} />
-            </a>
-            
-            <a 
-              href="https://www.linkedin.com/in/aayushimalhotraa" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-gray-600 dark:text-text-muted hover:text-soft-pink dark:hover:text-accent-teal transition-colors"
-              aria-label="LinkedIn Profile"
-            >
-              <Linkedin size={28} />
-            </a>
-            
-            <a 
-              href="mailto:aayushim33@gmail.com"
-              className="text-gray-600 dark:text-text-muted hover:text-soft-pink dark:hover:text-accent-teal transition-colors"
-              aria-label="Email Contact"
-            >
-              <Mail size={28} />
-            </a>
+
+          {/* Right: Cutout image */}
+          <div className="w-full lg:w-2/5 flex justify-center lg:justify-end">
+            <div className="relative">
+              <div className="absolute -inset-4 bg-accent-pink/10 rounded-2xl blur-2xl" />
+              <Image
+                src="/cutout.png"
+                alt="Aayushi Malhotra"
+                width={400}
+                height={540}
+                className="relative z-10 max-w-[320px] lg:max-w-[400px]"
+                style={{ objectFit: 'contain' }}
+                priority
+              />
+            </div>
           </div>
         </div>
-
       </div>
     </section>
   )
