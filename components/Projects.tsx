@@ -1,152 +1,119 @@
-import React, { useState } from 'react'
-import { ExternalLink } from 'lucide-react'
+import React from 'react'
+import { ExternalLink, Github, BookMarked } from 'lucide-react'
 
 const Projects = () => {
-  const [selectedFilter, setSelectedFilter] = useState('All')
-
-  const projects = [
+  const pinnedRepos = [
     {
-      title: 'AI-Powered Fashion Recommendation Engine',
-      description: 'Built a comprehensive fashion advisor using Python, TensorFlow, and React. Integrated OpenCV for wardrobe image processing with color theory-based styling. Processed 1000+ wardrobe images, improving outfit satisfaction by 40%.',
-      technologies: ['Python', 'TensorFlow', 'React', 'AWS', 'OpenCV'],
-      category: 'Machine Learning',
-      liveUrl: '',
-      githubUrl: '',
+      name: 'replayCI',
+      description: 'PR-native regression tests for tool-using AI agents with deterministic replay, behavior diffs, and cost/safety gates.',
+      language: 'Python',
+      languageColor: '#3572A5',
+      url: 'https://github.com/aayushimalhotra3/replayCI',
     },
     {
-      title: 'Real-time Cybersecurity Dashboard',
-      description: 'Python + Streamlit dashboard consuming real-time streaming data with custom ML-based anomaly detection alerts. Reduced incident response time by 40% and increased threat detection accuracy by 20%.',
-      technologies: ['Python', 'Streamlit', 'TensorFlow', 'Apache Spark'],
-      category: 'Data Science',
-      liveUrl: '',
-      githubUrl: '',
+      name: 'launchscope',
+      description: 'Feature flag and A/B experiment analytics platform built with FastAPI, Postgres, and React.',
+      language: 'Python',
+      languageColor: '#3572A5',
+      url: 'https://github.com/aayushimalhotra3/launchscope',
     },
     {
-      title: 'Cloud Infrastructure Optimization',
-      description: 'Kubernetes-based microservices on GCP with optimized data pipelines using Apache Beam and IAM security. Achieved 25% scalability increase and 30% faster data processing.',
-      technologies: ['Kubernetes', 'GCP', 'Apache Beam', 'Dataflow', 'IAM'],
-      category: 'Cloud Computing',
-      liveUrl: '',
-      githubUrl: '',
+      name: 'flakewatch',
+      description: 'CI flakiness and test failure analytics, tracking flaky tests and failure clusters over time with FastAPI and React.',
+      language: 'Python',
+      languageColor: '#3572A5',
+      url: 'https://github.com/aayushimalhotra3/flakewatch',
     },
     {
-      title: 'Sentiment Analysis Bot',
-      description: 'AI-driven chatbot with Flask backend, using NLTK and TextBlob for real-time sentiment processing. Handled 1,500+ user interactions with 85% accuracy in emotional feedback classification.',
-      technologies: ['Python', 'Flask', 'NLTK', 'TextBlob'],
-      category: 'Machine Learning',
-      liveUrl: '',
-      githubUrl: '',
+      name: 'infratrack',
+      description: 'Multi-tenant usage-based billing backend with FastAPI, Postgres, Stripe, quotas, analytics, and API keys.',
+      language: 'Python',
+      languageColor: '#3572A5',
+      url: 'https://github.com/aayushimalhotra3/infratrack',
     },
     {
-      title: 'ETL Pipeline Automation',
-      description: 'Automated Python ETL pipelines extracting data via REST APIs with PostgreSQL warehouse, Grafana dashboards, and Airflow orchestration. Cut resolution time by 25%, processing 10K+ tickets monthly.',
-      technologies: ['Python', 'PostgreSQL', 'REST APIs', 'Grafana', 'Airflow'],
-      category: 'Data Engineering',
-      liveUrl: '',
-      githubUrl: '',
+      name: 'urlshortener-app',
+      description: 'Production-ready Go microservice for URL shortening with Prometheus metrics, structured logging, Docker, CI/CD, and tests.',
+      language: 'Go',
+      languageColor: '#00ADD8',
+      url: 'https://github.com/aayushimalhotra3/urlshortener-app',
     },
     {
-      title: 'Deep Learning Research Models',
-      description: 'Custom TensorFlow neural network architectures for multi-dimensional social science analysis. Generated actionable insights for 5+ interdisciplinary studies, improving research efficiency by 35%.',
-      technologies: ['Python', 'TensorFlow', 'Deep Learning', 'Research'],
-      category: 'Research',
-      liveUrl: '',
-      githubUrl: '',
+      name: 'meterstack',
+      description: 'Multi-tenant SaaS billing and usage analytics backend with subscriptions, entitlements, quota checks, and a React dashboard.',
+      language: 'Python',
+      languageColor: '#3572A5',
+      url: 'https://github.com/aayushimalhotra3/meterstack',
     },
   ]
-
-  const allTechnologies = Array.from(new Set(projects.flatMap((p) => p.technologies))).sort()
-  const filters = ['All', ...allTechnologies]
-
-  const filtered =
-    selectedFilter === 'All'
-      ? projects
-      : projects.filter((p) => p.technologies.includes(selectedFilter))
 
   return (
     <section id="projects" className="py-24 bg-bg-dark">
       <div className="container-max">
-        <h2 className="text-2xl md:text-3xl font-bold text-text-light mb-4">
-          Featured Projects
-        </h2>
-        <p className="text-text-muted text-sm mb-8">
-          A selection of things I've built and problems I've solved.
-        </p>
-
-        {/* Filter pills */}
-        <div className="flex flex-wrap gap-2 mb-10">
-          {filters.map((f) => (
-            <button
-              key={f}
-              onClick={() => setSelectedFilter(f)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 ${
-                selectedFilter === f
-                  ? 'bg-accent-pink text-white'
-                  : 'bg-bg-card text-text-muted border border-border-dark hover:border-border-hover'
-              }`}
-            >
-              {f}
-            </button>
-          ))}
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h2 className="text-2xl md:text-3xl font-bold text-text-light mb-1">
+              Pinned Projects
+            </h2>
+            <p className="text-text-muted text-sm">
+              Highlights from my GitHub &mdash; things I've built and shipped.
+            </p>
+          </div>
+          <a
+            href="https://github.com/aayushimalhotra3?tab=repositories"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden sm:flex items-center gap-1.5 text-text-dim hover:text-text-light text-sm transition-colors"
+          >
+            View all repos <ExternalLink size={14} />
+          </a>
         </div>
 
-        {/* Projects grid */}
-        <div className="grid md:grid-cols-2 gap-6">
-          {filtered.map((project, index) => (
-            <div key={index} className="project-card">
-              <div className="mb-3">
-                <span className="text-xs text-accent-warm font-medium">{project.category}</span>
+        {/* Repo cards - GitHub pinned style */}
+        <div className="grid md:grid-cols-2 gap-4">
+          {pinnedRepos.map((repo) => (
+            <a
+              key={repo.name}
+              href={repo.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group bg-bg-card border border-border-dark rounded-xl p-5 hover:border-border-hover transition-all duration-200 flex flex-col"
+            >
+              <div className="flex items-center gap-2 mb-2">
+                <BookMarked size={16} className="text-text-dim flex-shrink-0" />
+                <span className="text-accent-pink font-semibold text-sm group-hover:underline">
+                  {repo.name}
+                </span>
               </div>
 
-              <h3 className="text-lg font-semibold text-text-light mb-3">
-                {project.title}
-              </h3>
-
-              <p className="text-text-muted text-sm leading-relaxed mb-4">
-                {project.description}
+              <p className="text-text-muted text-sm leading-relaxed mb-4 flex-1">
+                {repo.description}
               </p>
 
-              {/* Tech tags */}
-              <div className="flex flex-wrap gap-1.5 mb-4">
-                {project.technologies.map((tech, i) => (
-                  <span key={i} className="skill-tag">
-                    {tech}
-                  </span>
-                ))}
-              </div>
-
-              {/* Links */}
               <div className="flex items-center gap-4">
-                {project.liveUrl && (
-                  <a
-                    href={project.liveUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-accent-pink hover:text-accent-pink-hover text-sm font-medium transition-colors inline-flex items-center gap-1"
-                  >
-                    Live Demo <ExternalLink size={14} />
-                  </a>
-                )}
-                {project.githubUrl && (
-                  <a
-                    href={project.githubUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-text-muted hover:text-text-light text-sm font-medium transition-colors"
-                  >
-                    Source
-                  </a>
-                )}
+                <div className="flex items-center gap-1.5">
+                  <span
+                    className="w-3 h-3 rounded-full flex-shrink-0"
+                    style={{ backgroundColor: repo.languageColor }}
+                  />
+                  <span className="text-text-dim text-xs">{repo.language}</span>
+                </div>
               </div>
-            </div>
+            </a>
           ))}
         </div>
 
-        {filtered.length === 0 && (
-          <p className="text-center text-text-muted py-12">
-            No projects found with that filter.
-          </p>
-        )}
+        {/* Mobile link */}
+        <div className="sm:hidden mt-6 text-center">
+          <a
+            href="https://github.com/aayushimalhotra3?tab=repositories"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-text-dim hover:text-text-light text-sm transition-colors inline-flex items-center gap-1.5"
+          >
+            View all repositories <ExternalLink size={14} />
+          </a>
+        </div>
       </div>
     </section>
   )
