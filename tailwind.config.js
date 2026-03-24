@@ -17,7 +17,7 @@ module.exports = {
         surface: {
           DEFAULT: '#09090b',
           raised: '#0f0f12',
-          card: '#141418',
+          card: '#111115',
           hover: '#1a1a1f',
         },
         cream: {
@@ -29,6 +29,7 @@ module.exports = {
           DEFAULT: '#c9a87c',
           hover: '#d4b88e',
           subtle: 'rgba(201,168,124,0.12)',
+          glow: 'rgba(201,168,124,0.06)',
         },
         border: {
           DEFAULT: '#1e1e23',
@@ -36,22 +37,22 @@ module.exports = {
         },
       },
       fontFamily: {
-        serif: ['"Instrument Serif"', 'Georgia', 'serif'],
+        heading: ['"Space Grotesk"', 'system-ui', 'sans-serif'],
         sans: ['Inter', 'system-ui', 'sans-serif'],
       },
       fontSize: {
-        'display-xl': ['clamp(3rem, 8vw, 7rem)', { lineHeight: '0.95', letterSpacing: '-0.03em' }],
-        'display-lg': ['clamp(2.25rem, 5vw, 4rem)', { lineHeight: '1.05', letterSpacing: '-0.02em' }],
-        'display-md': ['clamp(1.75rem, 3vw, 2.5rem)', { lineHeight: '1.1', letterSpacing: '-0.02em' }],
+        'hero': ['clamp(3rem, 7vw, 5.5rem)', { lineHeight: '1.0', letterSpacing: '-0.03em', fontWeight: '700' }],
+        'display-lg': ['clamp(2rem, 4vw, 3rem)', { lineHeight: '1.05', letterSpacing: '-0.02em', fontWeight: '700' }],
+        'display-md': ['clamp(1.5rem, 3vw, 2.25rem)', { lineHeight: '1.1', letterSpacing: '-0.02em', fontWeight: '600' }],
       },
       animation: {
-        'float': 'float 6s ease-in-out infinite',
         'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'float': 'float 6s ease-in-out infinite',
       },
       keyframes: {
         float: {
           '0%, 100%': { transform: 'translateY(0px)' },
-          '50%': { transform: 'translateY(-20px)' },
+          '50%': { transform: 'translateY(-10px)' },
         },
       },
     },

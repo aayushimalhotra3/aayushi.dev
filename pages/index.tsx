@@ -2,6 +2,7 @@ import React from 'react'
 import Head from 'next/head'
 import Navigation from '@/components/Navigation'
 import Hero from '@/components/Hero'
+import TechMarquee from '@/components/TechMarquee'
 import About from '@/components/About'
 import Experience from '@/components/Experience'
 import Projects from '@/components/Projects'
@@ -36,6 +37,7 @@ export default function Home() {
         <main>
           <Hero />
           <About />
+          <TechMarquee />
           <Experience />
           <Projects />
           <Skills />

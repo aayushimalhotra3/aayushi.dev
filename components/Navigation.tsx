@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { FileText } from 'lucide-react'
 
 const navLinks = [
   { label: 'About', href: '#about' },
@@ -31,22 +32,25 @@ const Navigation = () => {
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: scrolled ? 0 : -100, opacity: scrolled ? 1 : 0 }}
         transition={{ duration: 0.3, ease: 'easeOut' }}
-        className="fixed top-6 left-1/2 -translate-x-1/2 z-50 hidden md:flex items-center gap-1 px-2 py-2 rounded-full bg-surface-raised/80 backdrop-blur-xl border border-border"
+        className="fixed top-4 left-1/2 -translate-x-1/2 z-50 hidden md:flex items-center gap-0.5 px-1.5 py-1.5 rounded-xl bg-surface-card/90 backdrop-blur-xl border border-border shadow-lg shadow-black/30"
+        style={{ borderBottom: '1px solid rgba(201,168,124,0.15)' }}
       >
         {navLinks.map(link => (
           <button
             key={link.label}
             onClick={() => scrollTo(link.href)}
-            className="px-4 py-1.5 rounded-full text-sm text-cream-muted hover:text-cream hover:bg-surface-hover transition-all duration-200"
+            className="px-3 py-1.5 rounded-lg text-[13px] text-cream-muted hover:text-cream hover:bg-surface-hover transition-all duration-200"
           >
             {link.label}
           </button>
         ))}
+        <span className="w-px h-4 bg-border mx-1" />
         <a
           href="/Aayushi_Malhotra_Resume.pdf"
           download
-          className="px-4 py-1.5 rounded-full text-sm text-accent hover:bg-accent-subtle transition-all duration-200"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[13px] bg-accent/10 text-accent hover:bg-accent/20 transition-all duration-200 font-medium"
         >
+          <FileText size={12} />
           Resume
         </a>
       </motion.nav>
@@ -54,9 +58,9 @@ const Navigation = () => {
       {/* Mobile nav */}
       <div className="md:hidden fixed top-0 left-0 right-0 z-50">
         <div className={`flex items-center justify-between px-6 py-4 transition-all duration-300 ${
-          scrolled ? 'bg-surface/90 backdrop-blur-xl border-b border-border' : ''
+          scrolled ? 'bg-surface-card/90 backdrop-blur-xl border-b border-border' : ''
         }`}>
-          <span className="font-serif text-lg text-cream italic">AM</span>
+          <span className="font-heading text-lg text-cream font-bold tracking-tight">AM</span>
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
             className="text-cream-muted p-1"
@@ -76,7 +80,7 @@ const Navigation = () => {
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.2 }}
-              className="bg-surface/95 backdrop-blur-xl border-b border-border overflow-hidden"
+              className="bg-surface-card/95 backdrop-blur-xl border-b border-border overflow-hidden"
             >
               <div className="px-6 py-4 flex flex-col gap-3">
                 {navLinks.map(link => (
@@ -91,9 +95,10 @@ const Navigation = () => {
                 <a
                   href="/Aayushi_Malhotra_Resume.pdf"
                   download
-                  className="text-accent text-sm py-1"
+                  className="flex items-center gap-2 text-accent text-sm py-1 font-medium"
                 >
-                  Resume
+                  <FileText size={14} />
+                  Download Resume
                 </a>
               </div>
             </motion.div>

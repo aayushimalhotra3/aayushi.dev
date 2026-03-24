@@ -9,6 +9,7 @@ const projects = [
       'PR-native regression tests for tool-using AI agents with deterministic replay, behavior diffs, and cost/safety gates.',
     tech: ['Python', 'CI/CD', 'AI Agents'],
     url: 'https://github.com/aayushimalhotra3/replayCI',
+    featured: true,
   },
   {
     name: 'launchscope',
@@ -16,6 +17,7 @@ const projects = [
       'Feature flag and A/B experiment analytics platform built with FastAPI, Postgres, and React.',
     tech: ['FastAPI', 'PostgreSQL', 'React'],
     url: 'https://github.com/aayushimalhotra3/launchscope',
+    featured: true,
   },
   {
     name: 'flakewatch',
@@ -48,37 +50,73 @@ const projects = [
 ]
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 30 },
+  hidden: { opacity: 0, y: 20 },
   visible: (i: number) => ({
     opacity: 1,
     y: 0,
-    transition: { duration: 0.5, delay: i * 0.08, ease: 'easeOut' },
+    transition: { duration: 0.45, delay: i * 0.06, ease: 'easeOut' },
   }),
 }
 
+const ProjectCard = ({ project, idx }: { project: typeof projects[0]; idx: number }) => (
+  <motion.a
+    variants={fadeUp}
+    custom={idx}
+    href={project.url}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="card-glow group bg-surface-card border border-border rounded-xl p-5 md:p-6 flex flex-col hover:border-accent/30 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(201,168,124,0.08)] transition-all duration-300"
+  >
+    <div className="flex-1">
+      <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center gap-2.5">
+          <Github size={15} className="text-cream-dim" />
+          <h3 className="font-heading text-cream font-semibold text-base group-hover:text-accent transition-colors duration-200">
+            {project.name}
+          </h3>
+        </div>
+        <ArrowUpRight
+          size={16}
+          className="text-cream-dim opacity-0 group-hover:opacity-100 group-hover:text-accent transition-all duration-200 -translate-y-0.5 group-hover:translate-y-0"
+        />
+      </div>
+      <p className="text-cream-muted text-sm leading-relaxed mb-4">
+        {project.description}
+      </p>
+    </div>
+    <div className="flex flex-wrap gap-1.5">
+      {project.tech.map(t => (
+        <span
+          key={t}
+          className="text-xs px-2.5 py-1 rounded-md bg-surface-hover/60 border border-border text-cream-dim group-hover:text-cream-muted transition-colors"
+        >
+          {t}
+        </span>
+      ))}
+    </div>
+  </motion.a>
+)
+
 const Projects = () => {
+  const featured = projects.filter(p => p.featured)
+  const rest = projects.filter(p => !p.featured)
+
   return (
-    <section id="projects" className="py-32 md:py-40 bg-surface-raised">
+    <section id="projects" className="py-20 md:py-28">
       <div className="max-w-6xl mx-auto px-6 md:px-12">
         <motion.div
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: '-100px' }}
-          className="flex items-end justify-between mb-20"
+          viewport={{ once: true, margin: '-60px' }}
+          className="flex items-end justify-between mb-12"
         >
           <div>
-            <motion.p
-              variants={fadeUp}
-              custom={0}
-              className="text-accent text-sm tracking-[0.2em] uppercase mb-4"
-            >
-              Projects
-            </motion.p>
-            <motion.h2
-              variants={fadeUp}
-              custom={1}
-              className="font-serif text-display-md text-cream italic"
-            >
+            <motion.div variants={fadeUp} custom={0} className="flex items-center gap-3 mb-4">
+              <span className="text-accent/50 font-mono text-xs font-medium">03</span>
+              <span className="h-px w-8 bg-accent/30" />
+              <span className="text-accent text-xs tracking-[0.2em] uppercase font-medium">Projects</span>
+            </motion.div>
+            <motion.h2 variants={fadeUp} custom={1} className="font-heading text-display-lg text-cream">
               Selected work
             </motion.h2>
           </div>
@@ -88,61 +126,33 @@ const Projects = () => {
             href="https://github.com/aayushimalhotra3?tab=repositories"
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden sm:flex items-center gap-1.5 text-cream-dim hover:text-accent text-sm transition-colors duration-200"
+            className="hidden sm:flex items-center gap-1.5 text-cream-dim hover:text-accent text-sm transition-colors duration-200 link-slide"
           >
             View all <ArrowUpRight size={14} />
           </motion.a>
         </motion.div>
 
+        {/* Featured — 2 column */}
         <motion.div
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: '-50px' }}
-          className="grid md:grid-cols-2 xl:grid-cols-3 gap-5"
+          viewport={{ once: true, margin: '-40px' }}
+          className="grid md:grid-cols-2 gap-4 mb-4"
         >
-          {projects.map((project, i) => (
-            <motion.a
-              key={project.name}
-              variants={fadeUp}
-              custom={i}
-              href={project.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group relative bg-surface-card border border-border rounded-2xl p-6 flex flex-col hover:border-accent/30 hover:-translate-y-1 transition-all duration-300"
-            >
-              {/* Hover glow */}
-              <div className="absolute inset-0 rounded-2xl bg-accent/[0.03] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
-              <div className="relative z-10 flex-1">
-                <div className="flex items-center justify-between mb-3">
-                  <h3 className="text-cream font-medium text-base group-hover:text-accent transition-colors duration-200">
-                    {project.name}
-                  </h3>
-                  <ArrowUpRight
-                    size={16}
-                    className="text-cream-dim opacity-0 group-hover:opacity-100 transition-all duration-200 -translate-y-1 group-hover:translate-y-0"
-                  />
-                </div>
-                <p className="text-cream-muted text-sm leading-relaxed mb-6">
-                  {project.description}
-                </p>
-              </div>
-
-              <div className="relative z-10 flex flex-wrap gap-2">
-                {project.tech.map(t => (
-                  <span
-                    key={t}
-                    className="text-cream-dim text-xs px-2.5 py-1 rounded-full bg-surface-hover/50 border border-border"
-                  >
-                    {t}
-                  </span>
-                ))}
-              </div>
-            </motion.a>
-          ))}
+          {featured.map((p, i) => <ProjectCard key={p.name} project={p} idx={i} />)}
         </motion.div>
 
-        <div className="sm:hidden mt-10 text-center">
+        {/* Rest — 4 column grid */}
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-40px' }}
+          className="grid sm:grid-cols-2 xl:grid-cols-4 gap-4"
+        >
+          {rest.map((p, i) => <ProjectCard key={p.name} project={p} idx={i} />)}
+        </motion.div>
+
+        <div className="sm:hidden mt-6 text-center">
           <a
             href="https://github.com/aayushimalhotra3?tab=repositories"
             target="_blank"

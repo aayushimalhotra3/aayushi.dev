@@ -10,94 +10,95 @@ const facts = [
 ]
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 30 },
+  hidden: { opacity: 0, y: 20 },
   visible: (i: number) => ({
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, delay: i * 0.1, ease: 'easeOut' },
+    transition: { duration: 0.45, delay: i * 0.07, ease: 'easeOut' },
   }),
 }
 
 const About = () => (
-  <section id="about" className="py-32 md:py-40">
+  <section id="about" className="py-20 md:py-28">
     <div className="max-w-6xl mx-auto px-6 md:px-12">
       <motion.div
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, margin: '-100px' }}
-        className="mb-20"
+        viewport={{ once: true, margin: '-60px' }}
+        className="mb-12"
       >
-        <motion.p
-          variants={fadeUp}
-          custom={0}
-          className="text-accent text-sm tracking-[0.2em] uppercase mb-4"
-        >
-          About
-        </motion.p>
+        <motion.div variants={fadeUp} custom={0} className="flex items-center gap-3 mb-4">
+          <span className="text-accent/50 font-mono text-xs font-medium">01</span>
+          <span className="h-px w-8 bg-accent/30" />
+          <span className="text-accent text-xs tracking-[0.2em] uppercase font-medium">About</span>
+        </motion.div>
         <motion.h2
           variants={fadeUp}
           custom={1}
-          className="font-serif text-display-md text-cream italic"
+          className="font-heading text-display-lg text-cream"
         >
-          Building systems where<br className="hidden md:block" /> correctness isn&apos;t optional
+          About me
         </motion.h2>
       </motion.div>
 
-      <div className="grid lg:grid-cols-5 gap-16 lg:gap-20">
-        {/* Left column - bio */}
+      <div className="grid lg:grid-cols-5 gap-10 lg:gap-14">
+        {/* Bio */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
-          transition={{ duration: 0.6, delay: 0.2 }}
+          viewport={{ once: true, margin: '-60px' }}
+          transition={{ duration: 0.5, delay: 0.1 }}
           className="lg:col-span-3"
         >
-          <p className="text-cream-muted text-lg leading-relaxed mb-6">
-            Computer Science senior at Michigan State University with five internships
-            spanning the US, India, and the UAE. I specialize in data pipelines, backend APIs,
-            and cloud infrastructure — the invisible architecture that everything else depends on.
+          <p className="text-cream-muted text-base leading-relaxed mb-4">
+            I&apos;m a Computer Science senior at Michigan State University who&apos;s racked up
+            five internships across three countries before even graduating. I&apos;ve built data
+            pipelines at Ericsson, tuned MySQL queries at IDX Exchange, shipped PySpark analytics
+            at Innefu Labs in India, and trained NLP models at a startup in Dubai.
           </p>
-          <p className="text-cream-muted text-lg leading-relaxed mb-8">
-            Currently a cloud engineering intern at IDX Exchange LLC working with GCP,
-            Apache Beam, and production data systems. Previously at Ericsson optimizing
-            Dataflow pipelines, and at Innefu Labs building PySpark analytics at scale.
-            HackDuke Code for Good winner.
+          <p className="text-cream-muted text-base leading-relaxed mb-4">
+            My sweet spot is the backend and data layer — the invisible infrastructure that
+            everything else depends on. I care about systems that are correct, observable, and
+            don&apos;t page you at 3 AM (even though I&apos;m probably awake anyway).
           </p>
-          <div className="flex items-center gap-3">
+          <p className="text-cream-muted text-base leading-relaxed mb-6">
+            Oh, and I won HackDuke&apos;s Code for Good hackathon. Not a bad weekend.
+          </p>
+          <div className="flex items-center gap-2.5 px-4 py-2.5 bg-surface-card border border-border rounded-lg w-fit">
             <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-40" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-accent" />
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-40" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-green-400" />
             </span>
-            <span className="text-cream-dim text-sm">
-              Open to full-time SWE, backend, and data engineering roles for 2026
+            <span className="text-cream-muted text-sm">
+              Open to full-time SWE, backend & data engineering roles &middot; 2026
             </span>
           </div>
         </motion.div>
 
-        {/* Right column - quick facts */}
+        {/* Quick Facts */}
         <motion.div
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={{ once: true, margin: '-60px' }}
           className="lg:col-span-2"
         >
           <motion.p
             variants={fadeUp}
             custom={0}
-            className="text-cream-dim text-xs tracking-[0.2em] uppercase mb-8"
+            className="text-cream-dim text-xs tracking-[0.2em] uppercase mb-5 font-medium"
           >
             Quick facts
           </motion.p>
-          <div className="space-y-5">
+          <div className="space-y-3">
             {facts.map((f, i) => (
               <motion.div
                 key={f.label}
                 variants={fadeUp}
                 custom={i + 1}
-                className="group border-l border-border hover:border-accent/50 pl-5 py-1 transition-colors duration-300"
+                className="group bg-surface-card border border-border rounded-lg px-4 py-3 hover:border-accent/30 transition-all duration-200"
               >
-                <p className="text-cream text-sm font-medium mb-0.5">{f.label}</p>
-                <p className="text-cream-dim text-sm">{f.detail}</p>
+                <p className="text-cream text-sm font-medium">{f.label}</p>
+                <p className="text-cream-dim text-xs mt-0.5">{f.detail}</p>
               </motion.div>
             ))}
           </div>
