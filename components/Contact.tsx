@@ -1,85 +1,86 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import { Github, Linkedin, FileText, ArrowUpRight, Mail } from 'lucide-react'
+import { Mail, Github, Linkedin, FileText } from 'lucide-react'
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 24 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] },
+  },
+}
 
 const Contact = () => (
-  <section id="contact" className="relative py-20 md:py-28 overflow-hidden">
-    {/* Subtle accent glow */}
-    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-accent/[0.04] rounded-full blur-3xl pointer-events-none" />
-
-    <div className="relative max-w-6xl mx-auto px-6 md:px-12">
+  <section id="contact" className="py-20 md:py-28">
+    <div className="max-w-6xl mx-auto px-6 md:px-8">
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: '-60px' }}
-        transition={{ duration: 0.5 }}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: '-80px' }}
+        transition={{ staggerChildren: 0.1 }}
       >
-        <div className="flex items-center gap-3 mb-4">
-          <span className="text-accent/50 font-mono text-xs font-medium">05</span>
-          <span className="h-px w-8 bg-accent/30" />
-          <span className="text-accent text-xs tracking-[0.2em] uppercase font-medium">Contact</span>
-        </div>
-        <h2 className="font-heading text-display-lg text-cream mb-4">
-          Let&apos;s connect
-        </h2>
-
-        {/* Status badge */}
-        <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-accent/10 border border-accent/20 rounded-full mb-8">
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-40" />
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-green-400" />
-          </span>
-          <span className="text-cream text-sm font-medium">
-            Open to full-time roles &middot; May 2026
-          </span>
-        </div>
-      </motion.div>
-
-      <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: '-40px' }}
-        transition={{ duration: 0.5, delay: 0.1 }}
-        className="mt-2"
-      >
-        <a
-          href="mailto:aayushim33@gmail.com"
-          className="inline-flex items-center gap-3 font-heading text-3xl md:text-4xl lg:text-5xl text-cream hover:text-accent transition-colors duration-200 font-semibold group"
+        <motion.p variants={fadeUp} className="section-label mb-4">
+          05 &mdash; Contact
+        </motion.p>
+        <motion.h2
+          variants={fadeUp}
+          className="font-display text-display-lg text-primary mb-4"
         >
-          <Mail size={28} className="text-accent shrink-0 group-hover:scale-110 transition-transform" />
-          aayushim33@gmail.com
-        </a>
+          Let&apos;s connect
+        </motion.h2>
+        <motion.p variants={fadeUp} className="text-muted text-base max-w-lg mb-10">
+          Open to full-time SWE, backend, and data engineering roles starting
+          May 2026.
+        </motion.p>
 
-        <div className="flex flex-wrap items-center gap-3 mt-10 pt-8 border-t border-border">
+        <motion.div
+          variants={fadeUp}
+          className="flex flex-wrap items-center gap-4"
+        >
           <a
-            href="https://github.com/aayushimalhotra3"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 px-4 py-2 bg-surface-card border border-border rounded-lg text-cream-dim hover:text-cream hover:border-border-hover text-sm transition-all duration-200"
+            href="mailto:aayushim33@gmail.com"
+            className="group flex items-center gap-2.5 px-5 py-3 bg-card rounded-card shadow-card border border-border hover:border-accent/40 hover:shadow-card-hover hover:-translate-y-0.5 transition-all duration-200"
           >
-            <Github size={16} />
-            GitHub
+            <Mail size={18} className="text-accent" />
+            <span className="text-primary text-sm font-medium group-hover:text-accent transition-colors">
+              aayushim33@gmail.com
+            </span>
           </a>
+
           <a
             href="https://www.linkedin.com/in/aayushimalhotraa"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 px-4 py-2 bg-surface-card border border-border rounded-lg text-cream-dim hover:text-cream hover:border-border-hover text-sm transition-all duration-200"
+            className="group flex items-center gap-2.5 px-5 py-3 bg-card rounded-card shadow-card border border-border hover:border-accent/40 hover:shadow-card-hover hover:-translate-y-0.5 transition-all duration-200"
           >
-            <Linkedin size={16} />
-            LinkedIn
+            <Linkedin size={18} className="text-accent" />
+            <span className="text-primary text-sm font-medium group-hover:text-accent transition-colors">
+              LinkedIn
+            </span>
+          </a>
+
+          <a
+            href="https://github.com/aayushimalhotra3"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group flex items-center gap-2.5 px-5 py-3 bg-card rounded-card shadow-card border border-border hover:border-accent/40 hover:shadow-card-hover hover:-translate-y-0.5 transition-all duration-200"
+          >
+            <Github size={18} className="text-accent" />
+            <span className="text-primary text-sm font-medium group-hover:text-accent transition-colors">
+              GitHub
+            </span>
           </a>
 
           <a
             href="/Aayushi_Malhotra_Resume.pdf"
             download
-            className="group flex items-center gap-2 px-5 py-2 bg-accent text-surface rounded-lg text-sm font-semibold hover:bg-accent-hover hover:scale-[1.02] hover:shadow-lg hover:shadow-accent/20 transition-all duration-200 ml-auto"
+            className="flex items-center gap-2.5 px-5 py-3 border-2 border-accent text-accent rounded-card hover:bg-accent hover:text-white transition-all duration-200 font-medium text-sm"
           >
-            <FileText size={15} />
+            <FileText size={18} />
             Download Resume
-            <ArrowUpRight size={14} className="opacity-0 group-hover:opacity-100 transition-opacity" />
           </a>
-        </div>
+        </motion.div>
       </motion.div>
     </div>
   </section>

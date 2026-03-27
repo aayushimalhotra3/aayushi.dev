@@ -1,63 +1,74 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 
-const categories = [
-  {
-    label: 'Languages',
-    color: 'border-blue-400/40',
-    dot: 'bg-blue-400',
-    skills: ['Python', 'TypeScript', 'JavaScript', 'Java', 'C++', 'SQL', 'Bash', 'Go'],
-  },
-  {
-    label: 'Frameworks & Libraries',
-    color: 'border-violet-400/40',
-    dot: 'bg-violet-400',
-    skills: ['FastAPI', 'React', 'Next.js', 'Flask', 'PySpark', 'Apache Beam', 'Streamlit', 'Node.js'],
-  },
-  {
-    label: 'Databases',
-    color: 'border-emerald-400/40',
-    dot: 'bg-emerald-400',
-    skills: ['PostgreSQL', 'MySQL', 'MongoDB'],
-  },
-  {
-    label: 'Cloud & Infrastructure',
-    color: 'border-amber-400/40',
-    dot: 'bg-amber-400',
-    skills: ['GCP', 'AWS', 'Docker', 'Kubernetes', 'Terraform', 'GCP Dataflow'],
-  },
-  {
-    label: 'Tools & Practices',
-    color: 'border-rose-400/40',
-    dot: 'bg-rose-400',
-    skills: ['Git', 'ETL Pipelines', 'Data Modeling', 'CI/CD', 'Prometheus'],
-  },
+type Skill = {
+  name: string
+  size: 'lg' | 'md' | 'sm'
+}
+
+const skills: Skill[] = [
+  // Large — primary tools
+  { name: 'Python', size: 'lg' },
+  { name: 'FastAPI', size: 'lg' },
+  { name: 'GCP', size: 'lg' },
+  { name: 'PostgreSQL', size: 'lg' },
+  { name: 'Docker', size: 'lg' },
+  // Medium — strong proficiency
+  { name: 'TypeScript', size: 'md' },
+  { name: 'React', size: 'md' },
+  { name: 'Kubernetes', size: 'md' },
+  { name: 'Apache Beam', size: 'md' },
+  { name: 'AWS', size: 'md' },
+  { name: 'PySpark', size: 'md' },
+  { name: 'SQL', size: 'md' },
+  { name: 'Next.js', size: 'md' },
+  // Small — working knowledge
+  { name: 'Java', size: 'sm' },
+  { name: 'C++', size: 'sm' },
+  { name: 'Go', size: 'sm' },
+  { name: 'Terraform', size: 'sm' },
+  { name: 'MySQL', size: 'sm' },
+  { name: 'MongoDB', size: 'sm' },
+  { name: 'Prometheus', size: 'sm' },
+  { name: 'Git', size: 'sm' },
+  { name: 'CI/CD', size: 'sm' },
+  { name: 'Bash', size: 'sm' },
+  { name: 'Flask', size: 'sm' },
+  { name: 'Streamlit', size: 'sm' },
 ]
 
+const sizeStyles: Record<Skill['size'], string> = {
+  lg: 'text-base md:text-lg font-bold px-5 py-2.5 bg-accent text-white hover:bg-accent-hover',
+  md: 'text-sm font-medium px-4 py-2 bg-card text-primary border border-border hover:border-accent/40 hover:text-accent',
+  sm: 'text-xs px-3 py-1.5 bg-bg text-muted border border-border hover:border-accent/30 hover:text-primary',
+}
+
 const fadeUp = {
-  hidden: { opacity: 0, y: 20 },
-  visible: (i: number) => ({
+  hidden: { opacity: 0, y: 24 },
+  visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.45, delay: i * 0.07, ease: 'easeOut' },
-  }),
+    transition: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] },
+  },
 }
 
 const Skills = () => (
-  <section id="skills" className="py-20 md:py-28 bg-surface-raised/60">
-    <div className="max-w-6xl mx-auto px-6 md:px-12">
+  <section id="skills" className="py-20 md:py-28">
+    <div className="max-w-6xl mx-auto px-6 md:px-8">
       <motion.div
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, margin: '-60px' }}
+        viewport={{ once: true, margin: '-80px' }}
+        transition={{ staggerChildren: 0.1 }}
         className="mb-12"
       >
-        <motion.div variants={fadeUp} custom={0} className="flex items-center gap-3 mb-4">
-          <span className="text-accent/50 font-mono text-xs font-medium">04</span>
-          <span className="h-px w-8 bg-accent/30" />
-          <span className="text-accent text-xs tracking-[0.2em] uppercase font-medium">Skills</span>
-        </motion.div>
-        <motion.h2 variants={fadeUp} custom={1} className="font-heading text-display-lg text-cream">
+        <motion.p variants={fadeUp} className="section-label mb-4">
+          04 &mdash; Skills
+        </motion.p>
+        <motion.h2
+          variants={fadeUp}
+          className="font-display text-display-lg text-primary"
+        >
           Tools of the trade
         </motion.h2>
       </motion.div>
@@ -66,25 +77,25 @@ const Skills = () => (
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: '-40px' }}
-        className="space-y-8"
+        transition={{ staggerChildren: 0.03, delayChildren: 0.1 }}
+        className="flex flex-wrap gap-3 items-center"
       >
-        {categories.map((cat, ci) => (
-          <motion.div key={cat.label} variants={fadeUp} custom={ci}>
-            <div className="flex items-center gap-2.5 mb-3">
-              <span className={`w-2 h-2 rounded-full ${cat.dot}`} />
-              <h3 className="text-cream text-sm font-medium">{cat.label}</h3>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {cat.skills.map(skill => (
-                <span
-                  key={skill}
-                  className={`px-3.5 py-2 rounded-lg text-sm bg-surface-card border ${cat.color} text-cream-muted hover:text-cream hover:bg-surface-hover transition-all duration-200 cursor-default`}
-                >
-                  {skill}
-                </span>
-              ))}
-            </div>
-          </motion.div>
+        {skills.map((skill) => (
+          <motion.span
+            key={skill.name}
+            variants={{
+              hidden: { opacity: 0, scale: 0.9 },
+              visible: {
+                opacity: 1,
+                scale: 1,
+                transition: { duration: 0.35, ease: 'easeOut' },
+              },
+            }}
+            whileHover={{ scale: 1.05 }}
+            className={`rounded-full font-mono cursor-default transition-all duration-200 shadow-card ${sizeStyles[skill.size]}`}
+          >
+            {skill.name}
+          </motion.span>
         ))}
       </motion.div>
     </div>

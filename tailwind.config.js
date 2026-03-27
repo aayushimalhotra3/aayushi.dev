@@ -14,45 +14,43 @@ module.exports = {
     },
     extend: {
       colors: {
-        surface: {
-          DEFAULT: '#09090b',
-          raised: '#0f0f12',
-          card: '#111115',
-          hover: '#1a1a1f',
-        },
-        cream: {
-          DEFAULT: '#e8e0d4',
-          muted: '#9a948a',
-          dim: '#5c5850',
-        },
+        bg: '#FFFBF5',
+        primary: '#1A1A1A',
         accent: {
-          DEFAULT: '#c9a87c',
-          hover: '#d4b88e',
-          subtle: 'rgba(201,168,124,0.12)',
-          glow: 'rgba(201,168,124,0.06)',
+          DEFAULT: '#E07A5F',
+          hover: '#D4694E',
+          light: 'rgba(224,122,95,0.10)',
+          glow: 'rgba(224,122,95,0.15)',
         },
-        border: {
-          DEFAULT: '#1e1e23',
-          hover: '#2a2a30',
-        },
+        muted: '#8B8680',
+        card: '#FFFFFF',
+        border: '#E8E4DF',
       },
       fontFamily: {
-        heading: ['"Space Grotesk"', 'system-ui', 'sans-serif'],
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        display: ['var(--font-syne)', 'system-ui', 'sans-serif'],
+        sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
+        mono: ['var(--font-mono)', 'monospace'],
       },
       fontSize: {
-        'hero': ['clamp(3rem, 7vw, 5.5rem)', { lineHeight: '1.0', letterSpacing: '-0.03em', fontWeight: '700' }],
-        'display-lg': ['clamp(2rem, 4vw, 3rem)', { lineHeight: '1.05', letterSpacing: '-0.02em', fontWeight: '700' }],
-        'display-md': ['clamp(1.5rem, 3vw, 2.25rem)', { lineHeight: '1.1', letterSpacing: '-0.02em', fontWeight: '600' }],
+        'hero': ['clamp(2.5rem, 6vw, 4.5rem)', { lineHeight: '1.05', letterSpacing: '-0.03em', fontWeight: '800' }],
+        'display-lg': ['clamp(2rem, 4vw, 3rem)', { lineHeight: '1.1', letterSpacing: '-0.02em', fontWeight: '700' }],
+        'display-md': ['clamp(1.5rem, 3vw, 2.25rem)', { lineHeight: '1.15', letterSpacing: '-0.02em', fontWeight: '600' }],
+      },
+      borderRadius: {
+        'card': '20px',
+      },
+      boxShadow: {
+        'card': '0 1px 3px rgba(0,0,0,0.06)',
+        'card-hover': '0 8px 25px rgba(0,0,0,0.08)',
+        'card-glow': '0 0 0 1px rgba(224,122,95,0.15), 0 8px 25px rgba(0,0,0,0.08)',
       },
       animation: {
-        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-        'float': 'float 6s ease-in-out infinite',
+        'marquee': 'marquee 35s linear infinite',
       },
       keyframes: {
-        float: {
-          '0%, 100%': { transform: 'translateY(0px)' },
-          '50%': { transform: 'translateY(-10px)' },
+        marquee: {
+          from: { transform: 'translateX(0)' },
+          to: { transform: 'translateX(-50%)' },
         },
       },
     },
