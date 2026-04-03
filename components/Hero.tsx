@@ -1,187 +1,146 @@
-import React from 'react'
-import { motion } from 'framer-motion'
-import { MapPin, Moon, ArrowRight } from 'lucide-react'
+'use client'
+
+import { useEffect, useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
+import { ArrowUpRight } from 'lucide-react'
 import Image from 'next/image'
+import { heroPhrases, resumeHref } from '@/lib/portfolio-data'
 
-const container = {
-  hidden: {},
-  visible: {
-    transition: { staggerChildren: 0.08 },
-  },
-}
-
-const cardVariant = {
-  hidden: { opacity: 0, y: 20, scale: 0.98 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] },
-  },
-}
-
-const techs = [
-  'Python', 'FastAPI', 'GCP', 'Docker', 'PostgreSQL', 'React',
-  'TypeScript', 'Kubernetes', 'Apache Beam', 'AWS', 'PySpark',
-  'Go', 'Terraform', 'SQL',
-]
-
-const CardWrapper = ({
-  children,
-  className = '',
-  accent = false,
-}: {
-  children: React.ReactNode
-  className?: string
-  accent?: boolean
-}) => (
-  <motion.div
-    variants={cardVariant}
-    className={`rounded-card transition-all duration-200 ${
-      accent
-        ? 'bg-accent text-white'
-        : 'bg-card shadow-card hover:shadow-card-glow hover:-translate-y-0.5'
-    } ${className}`}
-  >
-    {children}
-  </motion.div>
-)
+const ease = [0.22, 1, 0.36, 1] as const
 
 const Hero = () => {
-  return (
-    <section className="min-h-screen flex items-center pt-20 pb-12 md:pt-24 md:pb-16">
-      <div className="max-w-6xl mx-auto w-full px-6 md:px-8">
-        <motion.div
-          variants={container}
-          initial="hidden"
-          animate="visible"
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
-        >
-          {/* Card A — Intro (2 cols, 2 rows) */}
-          <CardWrapper className="sm:col-span-2 sm:row-span-2 p-8 md:p-10 flex flex-col justify-center">
-            <h1 className="font-display text-hero leading-[1.05]">
-              Hi, I&apos;m{' '}
-              <span className="text-accent">Aayushi</span>
-            </h1>
-            <p className="mt-4 text-muted text-base md:text-lg leading-relaxed max-w-md">
-              Software Engineer. I build data pipelines, backend APIs, and cloud infra.
-            </p>
-            <div className="mt-6 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent-light text-accent text-sm font-medium w-fit">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-40" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-accent" />
-              </span>
-              Open to full-time roles &middot; May 2026
-            </div>
-          </CardWrapper>
+  const [activePhrase, setActivePhrase] = useState(0)
 
-          {/* Card B — Profile photo */}
-          <CardWrapper className="p-0 overflow-hidden aspect-square flex items-center justify-center">
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setActivePhrase((current) => (current + 1) % heroPhrases.length)
+    }, 3000)
+
+    return () => window.clearInterval(timer)
+  }, [])
+
+  return (
+    <section
+      id="top"
+      className="relative overflow-hidden bg-bg-primary pb-16 pt-24 md:pb-20 md:pt-28"
+    >
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_60%_18%,rgba(110,59,91,0.18),transparent_62%)]" />
+
+      <div className="container relative">
+        <div className="border-b border-border-subtle pb-12 md:pb-14">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.1, ease }}
+            className="flex flex-col gap-3 border-y border-border-subtle py-4 md:flex-row md:items-center md:justify-between"
+          >
+            <span className="type-utility text-[0.7rem] uppercase tracking-[0.28em] text-text-tertiary">
+              Software Engineer
+            </span>
+            <div className="flex flex-wrap items-center gap-x-8 gap-y-2">
+              <span className="type-utility text-[0.68rem] uppercase tracking-[0.22em] text-text-tertiary">
+                5 internships, 3 countries
+              </span>
+              <span className="type-utility text-[0.68rem] uppercase tracking-[0.22em] text-text-tertiary">
+                Open to full-time · May 2026
+              </span>
+            </div>
+          </motion.div>
+
+          <motion.h1
+            initial={{ opacity: 0, y: 22 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.75, delay: 0.25, ease }}
+            className="type-hero-display mt-10 text-[clamp(3.6rem,9vw,7.2rem)] leading-[0.88] tracking-[-0.065em] text-text-primary md:mt-12"
+          >
+            <span className="block">Aayushi</span>
+            <span className="mt-2 block italic">Malhotra</span>
+          </motion.h1>
+
+          <div className="mt-7 h-px w-24 bg-[color:var(--accent-plum)] opacity-60 md:mt-8" />
+
+          <div className="mt-10 grid gap-10 lg:grid-cols-12 lg:items-end lg:gap-12">
+            <motion.div
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.45, ease }}
+              className="lg:col-span-7"
+            >
+              <div className="min-h-[3.5rem] overflow-hidden text-[1.02rem] leading-[1.85] text-text-secondary md:text-[1.1rem]">
+                <AnimatePresence mode="wait">
+                  <motion.p
+                    key={heroPhrases[activePhrase]}
+                    initial={{ opacity: 0, y: 14 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -14 }}
+                    transition={{ duration: 0.42, ease }}
+                    className="max-w-[38rem] tracking-[-0.01em]"
+                  >
+                    {heroPhrases[activePhrase]}
+                  </motion.p>
+                </AnimatePresence>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.55, ease }}
+              className="lg:col-span-5"
+            >
+              <div className="grid gap-3 sm:grid-cols-2">
+                <a
+                  href="#contact"
+                  onClick={(event) => {
+                    event.preventDefault()
+                    document.querySelector('#contact')?.scrollIntoView({
+                      behavior: 'smooth',
+                    })
+                  }}
+                  className="btn inline-flex w-full items-center justify-center bg-[color:var(--accent-plum)] px-6 py-3 text-sm font-medium tracking-[-0.01em] text-text-primary shadow-button hover:bg-[color:var(--accent-plum-light)]"
+                >
+                  Get in touch
+                </a>
+
+                <a
+                  href={resumeHref}
+                  download
+                  className="btn inline-flex w-full items-center justify-center gap-2 border border-border-subtle bg-[rgba(245,241,234,0.02)] px-6 py-3 text-sm font-medium tracking-[-0.01em] text-text-primary transition-colors hover:border-border-medium hover:bg-[rgba(245,241,234,0.03)]"
+                >
+                  Resume <ArrowUpRight size={16} />
+                </a>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+
+        <motion.figure
+          initial={{ opacity: 0, y: 26 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.4, ease }}
+          className="mt-12 md:mt-14"
+        >
+          <div className="relative overflow-hidden rounded-[18px] border border-border-subtle bg-bg-card shadow-card">
             <Image
               src="/profile.jpeg"
               alt="Aayushi Malhotra"
-              width={400}
-              height={400}
-              className="w-full h-full object-cover"
+              width={1400}
+              height={940}
               priority
+              className="h-[420px] w-full object-cover object-[50%_30%] md:h-[520px] [filter:saturate(0.92)_contrast(1.05)]"
             />
-          </CardWrapper>
+            <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(11,10,12,0.16)_0%,rgba(11,10,12,0)_42%,rgba(11,10,12,0.42)_100%)]" />
+          </div>
 
-          {/* Card C — Location */}
-          <CardWrapper className="p-6 flex flex-col justify-center">
-            <MapPin size={20} className="text-accent mb-3" />
-            <p className="font-display font-bold text-lg text-primary">
-              East Lansing, MI
-            </p>
-            <p className="text-muted text-sm mt-1">
-              From India &middot; Lived in Dominican Republic
-            </p>
-          </CardWrapper>
-
-          {/* Card D — Tech marquee (2 cols) */}
-          <CardWrapper className="sm:col-span-2 p-0 overflow-hidden relative">
-            {/* Fade edges */}
-            <div className="absolute inset-y-0 left-0 w-12 bg-gradient-to-r from-card to-transparent z-10 pointer-events-none" />
-            <div className="absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-card to-transparent z-10 pointer-events-none" />
-            <div className="py-5 overflow-hidden">
-              <div className="marquee-track flex items-center gap-6 whitespace-nowrap w-max">
-                {[...techs, ...techs].map((tech, i) => (
-                  <span
-                    key={`${tech}-${i}`}
-                    className="font-mono text-sm text-muted flex items-center gap-2"
-                  >
-                    <span className="w-1 h-1 rounded-full bg-accent/50" />
-                    {tech}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </CardWrapper>
-
-          {/* Card E — Stats */}
-          <CardWrapper className="p-6 flex flex-col justify-center">
-            <p className="font-display text-4xl font-extrabold text-accent leading-none">
-              5+
-            </p>
-            <p className="text-primary font-medium text-sm mt-2">
-              internships across
-            </p>
-            <p className="text-muted text-sm">3 countries</p>
-          </CardWrapper>
-
-          {/* Card F — Current role */}
-          <CardWrapper className="p-6 flex flex-col justify-center">
-            <div className="flex items-center gap-2 mb-2">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-40" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
-              </span>
-              <span className="text-muted text-xs font-mono uppercase tracking-wider">
-                Currently
-              </span>
-            </div>
-            <p className="font-display font-bold text-lg text-primary leading-tight">
-              @ IDX Exchange
-            </p>
-            <p className="text-muted text-sm mt-1">
-              Cloud &middot; Data &middot; Backend
-            </p>
-          </CardWrapper>
-
-          {/* Card G — Personality */}
-          <CardWrapper className="p-6 flex flex-col justify-center relative overflow-hidden">
-            {/* Subtle stars */}
-            <div className="absolute top-3 right-3 text-accent/20">
-              <Moon size={40} />
-            </div>
-            <p className="font-display font-bold text-base text-primary leading-snug relative z-10">
-              Night owl &mdash; best commits at 2 AM
-            </p>
-            <p className="text-muted text-xs mt-2 relative z-10">
-              Fueled by curiosity and cold brew
-            </p>
-          </CardWrapper>
-
-          {/* Card H — CTA */}
-          <CardWrapper accent className="p-6 flex items-center justify-between cursor-pointer group">
-            <a
-              href="#contact"
-              onClick={(e) => {
-                e.preventDefault()
-                document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })
-              }}
-              className="flex items-center justify-between w-full"
-            >
-              <span className="font-display font-bold text-xl">
-                Let&apos;s talk
-              </span>
-              <ArrowRight
-                size={24}
-                className="group-hover:translate-x-1 transition-transform duration-200"
-              />
-            </a>
-          </CardWrapper>
-        </motion.div>
+          <figcaption className="mt-6 grid gap-4 border-t border-border-subtle pt-5 md:grid-cols-2 md:gap-10">
+            <span className="type-utility text-[0.68rem] uppercase tracking-[0.22em] text-text-tertiary">
+              Portfolio · 2026
+            </span>
+            <span className="type-utility text-[0.68rem] uppercase tracking-[0.22em] text-text-tertiary md:text-right">
+              Data pipelines · Backend APIs · Cloud infrastructure
+            </span>
+          </figcaption>
+        </motion.figure>
       </div>
     </section>
   )

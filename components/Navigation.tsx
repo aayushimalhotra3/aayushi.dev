@@ -1,144 +1,194 @@
-import React, { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+'use client'
 
-const navLinks = [
-  { label: 'About', href: '#about' },
-  { label: 'Work', href: '#work' },
-  { label: 'Experience', href: '#experience' },
-  { label: 'Contact', href: '#contact' },
-]
+import { useEffect, useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
+import { Menu, X } from 'lucide-react'
+import { navLinks, resumeHref } from '@/lib/portfolio-data'
+
+const ease = [0.22, 1, 0.36, 1] as const
 
 const Navigation = () => {
   const [scrolled, setScrolled] = useState(false)
-  const [activeSection, setActiveSection] = useState('')
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [activeHref, setActiveHref] = useState('#top')
 
   useEffect(() => {
-    const onScroll = () => {
-      setScrolled(window.scrollY > 50)
+    const handleScroll = () => setScrolled(window.scrollY > 100)
 
-      const sections = ['contact', 'experience', 'work', 'about']
-      for (const id of sections) {
-        const el = document.getElementById(id)
-        if (el) {
-          const rect = el.getBoundingClientRect()
-          if (rect.top <= 200) {
-            setActiveSection(id)
-            return
-          }
-        }
-      }
-      setActiveSection('')
-    }
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
+    handleScroll()
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
   }, [])
+
+  useEffect(() => {
+    const sectionSelectors = ['#top', ...navLinks.map((link) => link.href)]
+    const targets = sectionSelectors
+      .map((selector) => document.querySelector(selector))
+      .filter((node): node is HTMLElement => node instanceof HTMLElement)
+
+    if (!targets.length) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting && entry.target instanceof HTMLElement)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)
+
+        const top = visible[0]?.target
+        if (top instanceof HTMLElement) {
+          setActiveHref(`#${top.id}`)
+        }
+      },
+      {
+        rootMargin: '-45% 0px -45% 0px',
+        threshold: [0.12, 0.22, 0.32],
+      },
+    )
+
+    targets.forEach((target) => observer.observe(target))
+    return () => observer.disconnect()
+  }, [])
+
+  useEffect(() => {
+    document.body.style.overflow = mobileOpen ? 'hidden' : ''
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [mobileOpen])
 
   const scrollTo = (href: string) => {
     setMobileOpen(false)
-    document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' })
+    setActiveHref(href)
+    const target = document.querySelector(href)
+    if (target instanceof HTMLElement) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
   }
+
+  const navClasses = `fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
+    scrolled || mobileOpen
+      ? 'border-b border-border-subtle bg-[color:var(--bg-nav)] backdrop-blur-sm'
+      : 'bg-transparent'
+  }`
 
   return (
     <>
-      {/* Desktop nav — always visible, gains blur on scroll */}
-      <nav
-        className={`fixed top-0 left-0 right-0 z-50 hidden md:block transition-all duration-300 ${
-          scrolled
-            ? 'bg-bg/80 backdrop-blur-xl border-b border-border'
-            : 'bg-transparent'
-        }`}
-      >
-        <div className="max-w-6xl mx-auto px-8 flex items-center justify-between h-16">
-          <a
-            href="#"
-            onClick={(e) => {
-              e.preventDefault()
+      <nav className={navClasses}>
+        <div className="container flex h-14 items-center justify-between">
+          <button
+            type="button"
+            onClick={() => {
+              setMobileOpen(false)
+              setActiveHref('#top')
               window.scrollTo({ top: 0, behavior: 'smooth' })
             }}
-            className="font-mono text-sm text-muted hover:text-primary transition-colors"
+            className="group relative type-utility text-[0.74rem] uppercase tracking-[0.34em] text-text-secondary transition-colors hover:text-text-primary"
           >
-            aayushi.dev
-          </a>
+            AM
+            <span className="pointer-events-none absolute -bottom-1 left-0 h-px w-full scale-x-0 bg-[color:var(--border-medium)] transition-transform duration-300 group-hover:scale-x-100" />
+          </button>
 
-          <div className="flex items-center gap-1">
-            {navLinks.map((link) => {
-              const sectionId = link.href.replace('#', '')
-              const isActive = activeSection === sectionId
-              return (
-                <button
-                  key={link.label}
-                  onClick={() => scrollTo(link.href)}
-                  className="relative px-4 py-2 font-mono text-xs tracking-wide uppercase transition-colors duration-200"
-                  style={{ color: isActive ? '#E07A5F' : '#8B8680' }}
-                >
-                  {isActive && (
-                    <span className="absolute left-1.5 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-accent" />
-                  )}
-                  <span className="hover:text-primary transition-colors">
+          <div className="hidden items-center gap-8 lg:flex">
+            <div className="flex items-center gap-7">
+              {navLinks.map((link) => {
+                const isActive = activeHref === link.href
+
+                return (
+                  <button
+                    key={link.label}
+                    type="button"
+                    onClick={() => scrollTo(link.href)}
+                    className={`group relative px-1 py-2 type-utility text-[0.66rem] uppercase tracking-[0.24em] transition-colors ${
+                      isActive
+                        ? 'text-text-primary'
+                        : 'text-text-tertiary hover:text-text-secondary'
+                    }`}
+                  >
                     {link.label}
-                  </span>
-                </button>
-              )
-            })}
+                    <span
+                      className={`pointer-events-none absolute left-1/2 top-full mt-2 h-px w-6 -translate-x-1/2 bg-[color:var(--accent-plum)] transition-all duration-300 ${
+                        isActive
+                          ? 'opacity-70'
+                          : 'scale-x-0 opacity-0 group-hover:scale-x-100 group-hover:opacity-45'
+                      }`}
+                    />
+                  </button>
+                )
+              })}
+            </div>
+
+            <a
+              href={resumeHref}
+              download
+              className="btn type-utility inline-flex items-center border border-border-subtle bg-[rgba(245,241,234,0.02)] px-4 py-2 text-[0.66rem] uppercase tracking-[0.26em] text-text-primary shadow-[inset_0_1px_0_rgba(245,241,234,0.08)] transition-colors hover:border-border-medium hover:bg-[rgba(110,59,91,0.1)]"
+            >
+              Resume
+            </a>
           </div>
+
+          <button
+            type="button"
+            aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+            onClick={() => setMobileOpen((open) => !open)}
+            className="btn inline-flex h-10 w-10 items-center justify-center border border-border-subtle bg-transparent text-text-primary transition-colors hover:border-border-medium hover:bg-[rgba(245,241,234,0.03)] lg:hidden"
+          >
+            {mobileOpen ? <X size={18} /> : <Menu size={18} />}
+          </button>
         </div>
       </nav>
 
-      {/* Mobile nav */}
-      <div className="md:hidden fixed top-0 left-0 right-0 z-50">
-        <div
-          className={`flex items-center justify-between px-6 py-4 transition-all duration-300 ${
-            scrolled || mobileOpen
-              ? 'bg-bg/90 backdrop-blur-xl border-b border-border'
-              : ''
-          }`}
-        >
-          <span className="font-mono text-sm text-muted">aayushi.dev</span>
-          <button
-            onClick={() => setMobileOpen(!mobileOpen)}
-            className="text-muted p-1"
-            aria-label="Toggle menu"
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.28, ease }}
+            className="fixed inset-0 z-40 bg-[color:var(--bg-overlay)] px-6 pb-12 pt-28 lg:hidden"
           >
-            <div className="w-5 flex flex-col gap-1.5">
-              <span
-                className={`block h-px bg-current transition-all duration-300 ${
-                  mobileOpen ? 'rotate-45 translate-y-[3.5px]' : ''
-                }`}
-              />
-              <span
-                className={`block h-px bg-current transition-all duration-300 ${
-                  mobileOpen ? '-rotate-45 -translate-y-[3.5px]' : ''
-                }`}
-              />
-            </div>
-          </button>
-        </div>
-
-        <AnimatePresence>
-          {mobileOpen && (
             <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.2 }}
-              className="bg-bg/95 backdrop-blur-xl border-b border-border overflow-hidden"
+              initial={{ y: 28, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 24, opacity: 0 }}
+              transition={{ duration: 0.42, ease }}
+              className="flex h-full flex-col items-center justify-center gap-7 text-center"
             >
-              <div className="px-6 py-4 flex flex-col gap-3">
-                {navLinks.map((link) => (
+              {navLinks.map((link) => {
+                const isActive = activeHref === link.href
+
+                return (
                   <button
                     key={link.label}
+                    type="button"
                     onClick={() => scrollTo(link.href)}
-                    className="text-left font-mono text-sm text-muted hover:text-primary py-1 tracking-wide uppercase transition-colors"
+                    className={`group relative type-hero-display text-[2.65rem] leading-[0.98] transition-colors sm:text-[3rem] ${
+                      isActive ? 'italic text-text-primary' : 'text-text-primary hover:text-accent-plum'
+                    }`}
                   >
                     {link.label}
+                    <span
+                      className={`pointer-events-none absolute left-1/2 top-full mt-4 h-px w-10 -translate-x-1/2 bg-[color:var(--accent-plum)] transition-all duration-300 ${
+                        isActive
+                          ? 'opacity-70'
+                          : 'scale-x-0 opacity-0 group-hover:scale-x-100 group-hover:opacity-50'
+                      }`}
+                    />
                   </button>
-                ))}
-              </div>
+                )
+              })}
+
+              <a
+                href={resumeHref}
+                download
+                onClick={() => setMobileOpen(false)}
+                className="btn type-utility mt-6 inline-flex border border-border-subtle bg-[rgba(245,241,234,0.02)] px-6 py-3 text-[0.7rem] uppercase tracking-[0.24em] text-text-primary shadow-[inset_0_1px_0_rgba(245,241,234,0.08)] transition-colors hover:border-border-medium hover:bg-[rgba(110,59,91,0.1)]"
+              >
+                Resume
+              </a>
             </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   )
 }
