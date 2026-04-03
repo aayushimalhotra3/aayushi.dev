@@ -22,6 +22,10 @@
   --radius-sm: 10px;
   --radius-md: 14px;
   --radius-lg: 18px;
+  --font-display:  'Playfair Display', Georgia, serif;
+  --font-body:     'IBM Plex Mono', system-ui, sans-serif;
+  --font-mono:     'IBM Plex Mono', monospace;
+  --font-ibm-mono: 'IBM Plex Mono', monospace;
 }
 
 @layer base {

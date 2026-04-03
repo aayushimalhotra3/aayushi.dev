@@ -1,9 +1,8 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    './app/**/*.{js,ts,jsx,tsx,mdx}',
+    './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
-    './lib/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
     screens: {
@@ -35,13 +34,21 @@ module.exports = {
           subtle: 'var(--border-subtle)',
           medium: 'var(--border-medium)',
         },
+        charcoal:    '#0e0d0c',
+        mauve:       '#c9a0a0',
+        'mauve-dim': '#9a7a7a',
       },
       fontFamily: {
         display: ['var(--font-display)', 'serif'],
         sans: ['var(--font-body)', 'sans-serif'],
         mono: ['var(--font-mono)', 'monospace'],
+        ibm: ['var(--font-ibm-mono)', 'monospace'],
       },
       fontSize: {
+        masthead: [
+          'clamp(4.5rem, 13vw, 12rem)',
+          { lineHeight: '0.9', letterSpacing: '-0.02em', fontWeight: '900' },
+        ],
         hero: [
           'clamp(3.8rem, 9vw, 6rem)',
           { lineHeight: '0.9', letterSpacing: '-0.06em', fontWeight: '600' },
