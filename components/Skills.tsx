@@ -63,15 +63,15 @@ export default function Skills() {
         const rect = wrap.getBoundingClientRect()
         const mx = (mouse.current.x - rect.left  - rect.width  / 2) / rect.width
         const my = (mouse.current.y - rect.top   - rect.height / 2) / rect.height
-        vel.current.y = vel.current.y * 0.88 + mx * 0.032
-        vel.current.x = vel.current.x * 0.88 + my * 0.018
-        /* hard cap — prevents flipping */
-        vel.current.y = Math.max(-0.032, Math.min(0.032, vel.current.y))
-        vel.current.x = Math.max(-0.022, Math.min(0.022, vel.current.x))
+        vel.current.y = vel.current.y * 0.94 + mx * 0.007
+        vel.current.x = vel.current.x * 0.94 + my * 0.004
+        /* hard cap */
+        vel.current.y = Math.max(-0.010, Math.min(0.010, vel.current.y))
+        vel.current.x = Math.max(-0.007, Math.min(0.007, vel.current.x))
       } else {
-        /* slightly faster auto-rotation, smooth return */
-        vel.current.y = vel.current.y * 0.97 + 0.008 * 0.03
-        vel.current.x *= 0.97
+        /* gentle auto-rotation */
+        vel.current.y = vel.current.y * 0.98 + 0.0025 * 0.02
+        vel.current.x *= 0.98
       }
 
       rot.current.x += vel.current.x
