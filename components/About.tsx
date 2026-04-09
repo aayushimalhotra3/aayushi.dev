@@ -1,13 +1,13 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import { Globe, Languages, GraduationCap, Moon, BookOpen } from 'lucide-react'
+import { Globe, GraduationCap, Moon, BookOpen, Gamepad2 } from 'lucide-react'
 
 const facts = [
-  { icon: Globe, label: 'International', detail: 'From India, lived in Dominican Republic' },
-  { icon: Languages, label: 'Multilingual', detail: 'English, Hindi, German, Spanish' },
-  { icon: GraduationCap, label: 'Education', detail: 'B.S. CS + Cognitive Science Minor, MSU' },
-  { icon: Moon, label: 'Night owl coder', detail: 'Best work happens after midnight' },
-  { icon: BookOpen, label: 'Sci-fi reader', detail: 'Dune and Asimov on repeat' },
+  { icon: Globe,         label: '3 countries',    detail: 'US, India & UAE — five internships' },
+  { icon: GraduationCap, label: 'Michigan State',  detail: 'CS + Cognitive Science Minor, May 2026' },
+  { icon: Moon,          label: 'Night owl',       detail: 'Best commits: 10pm – 4am' },
+  { icon: BookOpen,      label: 'Always reading',  detail: 'Sci-fi, Dune on repeat, fantasy binge' },
+  { icon: Gamepad2,      label: 'Animal Crossing', detail: 'New Horizons — my island is thriving' },
 ]
 
 const fadeUp = {
@@ -49,19 +49,21 @@ const About = () => (
           className="lg:col-span-3"
         >
           <p className="text-muted text-base leading-relaxed mb-4">
-            Computer Science senior at Michigan State with five internships
-            spanning the US, India, and the UAE. I specialize in data pipelines,
-            backend APIs, and cloud infrastructure.
+            I build the infrastructure nobody sees but everybody depends on.
+            CS senior at Michigan State — five internships, three countries,
+            one very stubborn night owl — graduating May 2026.
           </p>
           <p className="text-muted text-base leading-relaxed mb-4">
-            Currently working as a software engineering intern at IDX Exchange,
-            building Python + SQL ingestion systems and tuning MySQL for
-            high-traffic feeds. Previously at Ericsson refactoring Apache Beam
-            pipelines on GCP Dataflow.
+            Right now I&apos;m at IDX Exchange building Python + SQL data ingestion
+            pipelines and tuning MySQL for high-traffic feeds. Before that,
+            I was at Ericsson refactoring Apache Beam pipelines on GCP Dataflow.
+            I specialize in data pipelines, backend APIs, and cloud infrastructure.
           </p>
           <p className="text-muted text-base leading-relaxed">
-            I care about systems that are reliable, observable, and built to
-            last.
+            Outside the terminal, I&apos;m usually mid-chapter in a book, on a walk
+            with my headphones in, or tending to my Animal Crossing island.
+            Music is always on. I care about systems that are reliable,
+            observable, and built to last.
           </p>
         </motion.div>
 
