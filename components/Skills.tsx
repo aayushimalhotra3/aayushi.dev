@@ -54,7 +54,7 @@ export default function Skills() {
     if (!wrap) return
 
     const spans = Array.from(wrap.querySelectorAll<HTMLElement>('[data-skill]'))
-    const R = (wrap as HTMLDivElement).offsetWidth < 520 ? 120 : 185
+    const R = (wrap as HTMLDivElement).offsetWidth < 520 ? 115 : 155
     let raf: number
 
     function tick() {
@@ -63,11 +63,15 @@ export default function Skills() {
         const rect = wrap.getBoundingClientRect()
         const mx = (mouse.current.x - rect.left  - rect.width  / 2) / rect.width
         const my = (mouse.current.y - rect.top   - rect.height / 2) / rect.height
-        vel.current.y = vel.current.y * 0.72 + mx * 0.12
-        vel.current.x = vel.current.x * 0.72 + my * 0.07
+        vel.current.y = vel.current.y * 0.88 + mx * 0.032
+        vel.current.x = vel.current.x * 0.88 + my * 0.018
+        /* hard cap — prevents flipping */
+        vel.current.y = Math.max(-0.032, Math.min(0.032, vel.current.y))
+        vel.current.x = Math.max(-0.022, Math.min(0.022, vel.current.x))
       } else {
-        vel.current.y = vel.current.y * 0.96 + 0.004 * 0.04
-        vel.current.x *= 0.96
+        /* slightly faster auto-rotation, smooth return */
+        vel.current.y = vel.current.y * 0.97 + 0.008 * 0.03
+        vel.current.x *= 0.97
       }
 
       rot.current.x += vel.current.x
@@ -127,105 +131,106 @@ export default function Skills() {
   }, [])
 
   return (
-    <section id="skills" className="py-24 md:py-32 overflow-hidden">
+    <section id="skills" className="py-20 md:py-28 overflow-hidden">
       <div className="max-w-6xl mx-auto px-6 md:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.5fr] gap-8 lg:gap-12 items-center">
 
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-80px' }}
-          transition={{ duration: 0.55 }}
-          className="mb-10 md:mb-14"
-        >
-          <p className="section-label mb-4">04 &mdash; Skills</p>
-          <h2 className="font-display text-display-lg" style={{ color: 'var(--text-primary)' }}>
-            What I build with
-          </h2>
-        </motion.div>
-
-        {/* Sphere wrapper */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.88 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.9, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-          className="relative mx-auto"
-          style={{ maxWidth: '700px' }}
-        >
-
-          {/* Plum radial glow */}
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0"
-            style={{
-              background: 'radial-gradient(ellipse 60% 55% at 50% 50%, rgba(110,59,91,0.18) 0%, transparent 68%)',
-            }}
-          />
-
-          {/* Orbit ring SVG */}
-          <svg
-            aria-hidden
-            className="pointer-events-none absolute inset-0 w-full h-full"
-            viewBox="0 0 100 100"
-            fill="none"
+          {/* ── Left: header ── */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.6 }}
           >
-            <ellipse
-              ref={ringRef}
-              cx="50" cy="50"
-              rx="36" ry="10"
-              stroke="rgba(201,160,160,0.12)"
-              strokeWidth="0.4"
-              strokeDasharray="2 3"
-            />
-          </svg>
+            <p className="section-label mb-4">04 &mdash; Skills</p>
+            <h2
+              className="font-display text-display-lg mb-6"
+              style={{ color: 'var(--text-primary)' }}
+            >
+              What I<br />build with
+            </h2>
+            <p
+              className="font-sans leading-relaxed mb-8"
+              style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', maxWidth: '28ch' }}
+            >
+              Languages, frameworks, infra, and tools I reach for day-to-day.
+            </p>
+            <motion.p
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 1.2, duration: 0.8 }}
+              aria-hidden
+              className="font-mono"
+              style={{ fontSize: '0.56rem', letterSpacing: '0.22em', color: 'var(--text-tertiary)', opacity: 0.55 }}
+            >
+              [ drag to rotate ]
+            </motion.p>
+          </motion.div>
 
-          {/* Sphere */}
-          <div
-            ref={wrapRef}
-            className="relative mx-auto cursor-move"
-            style={{ height: '440px' }}
-          >
-            {SKILLS.map((skill, i) => (
-              <span
-                key={skill}
-                data-skill={i}
-                className="absolute font-sans pointer-events-none whitespace-nowrap"
-                style={{
-                  left:          '50%',
-                  top:           '50%',
-                  transform:     'translate(-50%,-50%)',
-                  fontSize:      '0.85rem',
-                  color:         '#f5f1ea',
-                  opacity:       0,
-                  letterSpacing: '0.015em',
-                  willChange:    'transform, opacity, font-size',
-                }}
-              >
-                {skill}
-              </span>
-            ))}
-          </div>
-
-          {/* Hint */}
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
+          {/* ── Right: sphere ── */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            transition={{ delay: 1.4, duration: 1 }}
-            aria-hidden
-            className="text-center font-mono"
-            style={{
-              fontSize:      '0.58rem',
-              letterSpacing: '0.24em',
-              color:         'var(--text-tertiary)',
-              opacity:       0.5,
-              marginTop:     '-0.5rem',
-            }}
+            transition={{ duration: 0.9, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+            className="relative"
           >
-            [ move cursor to rotate ]
-          </motion.p>
-        </motion.div>
+            {/* Plum radial glow */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-0"
+              style={{
+                background: 'radial-gradient(ellipse 65% 60% at 50% 50%, rgba(110,59,91,0.18) 0%, transparent 70%)',
+              }}
+            />
+
+            {/* Orbit ring */}
+            <svg
+              aria-hidden
+              className="pointer-events-none absolute inset-0 w-full h-full"
+              viewBox="0 0 100 100"
+              fill="none"
+            >
+              <ellipse
+                ref={ringRef}
+                cx="50" cy="50"
+                rx="38" ry="11"
+                stroke="rgba(201,160,160,0.1)"
+                strokeWidth="0.4"
+                strokeDasharray="2 3"
+              />
+            </svg>
+
+            {/* Sphere */}
+            <div
+              ref={wrapRef}
+              className="relative mx-auto cursor-move"
+              style={{ height: '360px' }}
+            >
+              {SKILLS.map((skill, i) => (
+                <span
+                  key={skill}
+                  data-skill={i}
+                  className="absolute font-sans pointer-events-none whitespace-nowrap"
+                  style={{
+                    left:          '50%',
+                    top:           '50%',
+                    transform:     'translate(-50%,-50%)',
+                    fontSize:      '0.85rem',
+                    color:         '#f5f1ea',
+                    opacity:       0,
+                    letterSpacing: '0.015em',
+                    willChange:    'transform, opacity, font-size',
+                  }}
+                >
+                  {skill}
+                </span>
+              ))}
+            </div>
+          </motion.div>
+
+        </div>
       </div>
     </section>
   )
