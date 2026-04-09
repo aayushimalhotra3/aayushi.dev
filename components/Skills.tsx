@@ -54,7 +54,7 @@ export default function Skills() {
     if (!wrap) return
 
     const spans = Array.from(wrap.querySelectorAll<HTMLElement>('[data-skill]'))
-    const R = (wrap as HTMLDivElement).offsetWidth < 520 ? 135 : 180
+    const R = (wrap as HTMLDivElement).offsetWidth < 520 ? 145 : 200
     let raf: number
 
     function tick() {
@@ -206,7 +206,7 @@ export default function Skills() {
             <div
               ref={wrapRef}
               className="relative mx-auto cursor-move"
-              style={{ height: '400px' }}
+              style={{ height: '360px' }}
             >
               {SKILLS.map((skill, i) => (
                 <span
