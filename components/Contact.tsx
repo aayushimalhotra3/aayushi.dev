@@ -6,10 +6,9 @@ import { SiGithub } from 'react-icons/si'
 import { FaLinkedin } from 'react-icons/fa'
 import { MdEmail } from 'react-icons/md'
 
-const MAUVE              = '#d4a5b5'
-const MAUVE_BORDER_IDLE  = 'rgba(212,165,181,0.2)'
-const MAUVE_BORDER_FOCUS = 'rgba(212,165,181,0.7)'
-const MAUVE_GLOW         = '0 0 0 3px rgba(212,165,181,0.10)'
+const BORDER_IDLE  = 'var(--border-subtle)'
+const BORDER_FOCUS = 'var(--border-medium)'
+const FOCUS_GLOW   = '0 0 0 3px rgba(110,59,91,0.18)'
 
 const fadeUp = {
   hidden:  { opacity: 0, y: 24 },
@@ -17,32 +16,28 @@ const fadeUp = {
 }
 
 const fieldBase: React.CSSProperties = {
-  width:       '100%',
-  background:  'var(--bg-card)',
+  width:        '100%',
+  background:   'var(--bg-card)',
   borderRadius: '10px',
-  padding:     '14px 16px',
-  fontFamily:  'var(--font-body)',
-  fontSize:    '14px',
-  color:       'var(--text-primary)',
-  outline:     'none',
-  transition:  'border-color 0.2s ease, box-shadow 0.2s ease',
-  display:     'block',
-  boxSizing:   'border-box',
+  padding:      '14px 16px',
+  fontFamily:   'var(--font-body)',
+  fontSize:     '14px',
+  color:        'var(--text-primary)',
+  outline:      'none',
+  transition:   'border-color 0.2s ease, box-shadow 0.2s ease',
+  display:      'block',
+  boxSizing:    'border-box',
 }
 
 function useField() {
   const [focused, setFocused] = useState(false)
-  return {
-    focused,
-    onFocus: () => setFocused(true),
-    onBlur:  () => setFocused(false),
-  }
+  return { focused, onFocus: () => setFocused(true), onBlur: () => setFocused(false) }
 }
 
 function focusStyle(focused: boolean): React.CSSProperties {
   return {
-    border:    `1px solid ${focused ? MAUVE_BORDER_FOCUS : MAUVE_BORDER_IDLE}`,
-    boxShadow: focused ? MAUVE_GLOW : 'none',
+    border:    `1px solid ${focused ? BORDER_FOCUS : BORDER_IDLE}`,
+    boxShadow: focused ? FOCUS_GLOW : 'none',
   }
 }
 
@@ -54,7 +49,7 @@ function SocialIcon({ Icon, href }: { Icon: React.ElementType; href: string }) {
       target="_blank"
       rel="noopener noreferrer"
       style={{
-        color:      hovered ? MAUVE : 'var(--text-secondary)',
+        color:      hovered ? 'var(--accent-blush)' : 'var(--text-tertiary)',
         transform:  hovered ? 'translateY(-2px)' : 'translateY(0)',
         transition: 'color 0.2s ease, transform 0.2s ease',
         display:    'inline-flex',
@@ -91,76 +86,45 @@ export default function Contact() {
       <div className="max-w-6xl mx-auto px-6 md:px-8">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
 
-          {/* ── Left: label, heading, subtext, social, footer ── */}
+          {/* ── Left ── */}
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: '-80px' }}
             transition={{ staggerChildren: 0.1 }}
           >
-            {/* Section label */}
-            <motion.div
-              variants={fadeUp}
-              style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}
-            >
-              <span style={{ display: 'block', width: '28px', height: '1px', background: MAUVE, opacity: 0.55 }} />
-              <span
-                className="font-mono"
-                style={{ fontSize: '0.68rem', letterSpacing: '0.24em', textTransform: 'uppercase', color: MAUVE }}
-              >
-                Contact
-              </span>
-            </motion.div>
-
-            {/* Heading */}
+            <motion.p variants={fadeUp} className="section-label mb-4">
+              05 &mdash; Contact
+            </motion.p>
             <motion.h2
               variants={fadeUp}
-              className="font-display"
-              style={{
-                fontSize:      'clamp(2rem, 4vw, 3rem)',
-                fontWeight:    600,
-                letterSpacing: '-0.03em',
-                color:         'var(--text-primary)',
-                marginBottom:  '16px',
-              }}
+              className="font-display text-display-lg mb-4"
+              style={{ color: 'var(--text-primary)' }}
             >
               Let&apos;s connect! 💌
             </motion.h2>
-
-            {/* Subtext */}
             <motion.p
               variants={fadeUp}
-              style={{
-                fontFamily:   'var(--font-body)',
-                fontSize:     '0.92rem',
-                color:        'var(--text-secondary)',
-                lineHeight:   1.7,
-                marginBottom: '40px',
-              }}
+              className="font-sans leading-relaxed mb-10"
+              style={{ fontSize: '0.92rem', color: 'var(--text-secondary)' }}
             >
               Whether it&apos;s a role, a collab, or just a hello —<br />
               my inbox is always open.
             </motion.p>
 
-            {/* Social icons */}
             <motion.div
               variants={fadeUp}
-              style={{ display: 'flex', gap: '24px', marginBottom: '48px' }}
+              style={{ display: 'flex', gap: '20px', marginBottom: '48px' }}
             >
               <SocialIcon Icon={SiGithub}   href="https://github.com/aayushimalhotra3" />
               <SocialIcon Icon={FaLinkedin} href="https://www.linkedin.com/in/aayushimalhotraa" />
               <SocialIcon Icon={MdEmail}    href="mailto:aayushim33@gmail.com" />
             </motion.div>
 
-            {/* Footer */}
             <motion.p
               variants={fadeUp}
-              style={{
-                fontFamily:    'var(--font-mono)',
-                fontSize:      '11px',
-                color:         'var(--text-tertiary)',
-                letterSpacing: '0.06em',
-              }}
+              className="font-mono"
+              style={{ fontSize: '11px', color: 'var(--text-tertiary)', letterSpacing: '0.06em' }}
             >
               designed &amp; built by aayushi malhotra · 2026
             </motion.p>
@@ -206,17 +170,17 @@ export default function Contact() {
               type="submit"
               style={{
                 width:        '100%',
-                background:   MAUVE,
-                color:        '#0a0e1a',
+                background:   btnHover ? 'var(--accent-plum-light)' : 'var(--accent-plum)',
+                color:        'var(--text-primary)',
                 border:       'none',
                 borderRadius: '10px',
                 padding:      '14px',
                 fontFamily:   'var(--font-mono)',
-                fontSize:     '14px',
+                fontSize:     '13px',
+                letterSpacing: '0.06em',
                 cursor:       'pointer',
-                transition:   'filter 0.2s ease, transform 0.2s ease',
-                filter:       btnHover ? 'brightness(1.1)' : 'brightness(1)',
-                transform:    btnHover ? 'scale(1.01)' : 'scale(1)',
+                transition:   'background 0.2s ease, transform 0.2s ease',
+                transform:    btnHover ? 'translateY(-1px)' : 'translateY(0)',
               }}
               onMouseEnter={() => setBtnHover(true)}
               onMouseLeave={() => setBtnHover(false)}
