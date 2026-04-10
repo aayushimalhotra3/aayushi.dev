@@ -62,9 +62,7 @@ const Hero = () => (
         className="font-ibm text-[12px] md:text-[13px] tracking-[0.06em] max-w-md mb-10 leading-relaxed"
         style={{ color: '#9a7a7a' }}
       >
-        Built across 3 countries — US, India, UAE.
-        <br />
-        Deploys everywhere.
+        Developer, data nerd, and very committed night owl.
       </motion.p>
 
       {/* Availability pill */}

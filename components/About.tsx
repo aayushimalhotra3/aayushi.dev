@@ -49,21 +49,25 @@ const About = () => (
           className="lg:col-span-3"
         >
           <p className="text-muted text-base leading-relaxed mb-4">
-            I build the infrastructure nobody sees but everybody depends on.
-            CS senior at Michigan State — five internships, three countries,
-            one very stubborn night owl — graduating May 2026.
+            Hi! I&apos;m Aayushi ✨ CS senior at Michigan State with a Cognitive
+            Science minor, graduating May 2026. I&apos;ve interned in three different
+            countries and I still can&apos;t fix my sleep schedule.
           </p>
           <p className="text-muted text-base leading-relaxed mb-4">
-            Right now I&apos;m at IDX Exchange building Python + SQL data ingestion
-            pipelines and tuning MySQL for high-traffic feeds. Before that,
-            I was at Ericsson refactoring Apache Beam pipelines on GCP Dataflow.
-            I specialize in data pipelines, backend APIs, and cloud infrastructure.
+            When I&apos;m not coding, I&apos;m probably on my Animal Crossing island,
+            reading something I picked up at 1 AM, or on a walk pretending
+            I&apos;m in a music video. 🎵 Always looking for song recs and book
+            recs — don&apos;t be shy!
           </p>
           <p className="text-muted text-base leading-relaxed">
-            Outside the terminal, I&apos;m usually mid-chapter in a book, on a walk
-            with my headphones in, or tending to my Animal Crossing island.
-            Music is always on. I care about systems that are reliable,
-            observable, and built to last.
+            <a
+              href="#contact"
+              style={{ color: 'var(--accent-blush)', textDecoration: 'none' }}
+              onMouseEnter={e => (e.currentTarget.style.textDecoration = 'underline')}
+              onMouseLeave={e => (e.currentTarget.style.textDecoration = 'none')}
+            >
+              Say hi anytime →
+            </a>
           </p>
         </motion.div>
 
