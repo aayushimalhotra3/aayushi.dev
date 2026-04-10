@@ -1,7 +1,7 @@
 'use client'
 
-import React from 'react'
-import { motion } from 'framer-motion'
+import React, { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { MapPin, GraduationCap } from 'lucide-react'
 
 type Experience = {
@@ -79,182 +79,9 @@ const experiences: Experience[] = [
 
 const EASE = [0.22, 1, 0.36, 1] as const
 
-function TimelineDot({ current }: { current?: boolean }) {
-  return (
-    <div
-      className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center"
-      style={{ top: '1.75rem', zIndex: 10 }}
-    >
-      {current ? (
-        <>
-          <span
-            className="absolute rounded-full animate-ping"
-            style={{ width: '18px', height: '18px', background: 'var(--accent-blush)', opacity: 0.3 }}
-          />
-          <span
-            className="relative rounded-full"
-            style={{ width: '10px', height: '10px', background: 'var(--accent-blush)', boxShadow: '0 0 10px rgba(216,163,181,0.5)' }}
-          />
-        </>
-      ) : (
-        <span
-          className="rounded-full"
-          style={{ width: '8px', height: '8px', background: 'var(--accent-plum)', border: '2px solid var(--bg-primary)', display: 'block' }}
-        />
-      )}
-    </div>
-  )
-}
-
-function ExperienceCard({ exp, index }: { exp: Experience; index: number }) {
-  const isRight = index % 2 !== 0
-
-  return (
-    /* Outer row — used for centering the dot; cards sit in their half */
-    <div className="relative hidden lg:flex items-start mb-10">
-      <TimelineDot current={exp.current} />
-
-      <motion.div
-        className={`w-[46%] ${isRight ? 'ml-auto pl-10' : 'mr-auto pr-10'}`}
-        initial={{ opacity: 0, x: isRight ? 36 : -36 }}
-        whileInView={{ opacity: 1, x: 0 }}
-        viewport={{ once: true, margin: '-40px' }}
-        transition={{ duration: 0.55, ease: EASE }}
-      >
-        <Card exp={exp} />
-      </motion.div>
-    </div>
-  )
-}
-
-/* Mobile card — left-side dot + connector line */
-function MobileCard({ exp, index, isLast }: { exp: Experience; index: number; isLast: boolean }) {
-  return (
-    <div className="lg:hidden relative flex gap-4 mb-6">
-      {/* Dot + line */}
-      <div className="relative flex flex-col items-center" style={{ width: '16px', flexShrink: 0 }}>
-        <div
-          className="rounded-full mt-6 shrink-0"
-          style={{
-            width:      '8px',
-            height:     '8px',
-            background: exp.current ? 'var(--accent-blush)' : 'var(--accent-plum)',
-            boxShadow:  exp.current ? '0 0 8px rgba(216,163,181,0.5)' : 'none',
-          }}
-        />
-        {!isLast && (
-          <div className="flex-1 mt-1" style={{ width: '1px', background: 'var(--border-subtle)' }} />
-        )}
-      </div>
-
-      <motion.div
-        className="flex-1 pb-2"
-        initial={{ opacity: 0, x: 20 }}
-        whileInView={{ opacity: 1, x: 0 }}
-        viewport={{ once: true, margin: '-30px' }}
-        transition={{ duration: 0.45, delay: index * 0.05, ease: EASE }}
-      >
-        <Card exp={exp} />
-      </motion.div>
-    </div>
-  )
-}
-
-function Card({ exp }: { exp: Experience }) {
-  return (
-    <div
-      style={{
-        background:   'var(--bg-card)',
-        border:       '1px solid var(--border-subtle)',
-        borderRadius: '14px',
-        padding:      '20px 22px',
-        transition:   'border-color 0.2s ease, box-shadow 0.2s ease',
-      }}
-      onMouseEnter={e => {
-        const el = e.currentTarget as HTMLDivElement
-        el.style.borderColor = 'var(--border-medium)'
-        el.style.boxShadow   = '0 12px 40px rgba(0,0,0,0.45)'
-      }}
-      onMouseLeave={e => {
-        const el = e.currentTarget as HTMLDivElement
-        el.style.borderColor = 'var(--border-subtle)'
-        el.style.boxShadow   = 'none'
-      }}
-    >
-      {/* Period */}
-      <p
-        className="font-mono mb-2"
-        style={{ fontSize: '0.62rem', letterSpacing: '0.16em', color: 'var(--text-tertiary)' }}
-      >
-        {exp.period}
-      </p>
-
-      {/* Company + badge */}
-      <div className="flex items-center gap-2 flex-wrap mb-1">
-        <h3
-          className="font-display font-bold"
-          style={{ fontSize: 'clamp(1rem, 2vw, 1.2rem)', color: 'var(--text-primary)', lineHeight: 1.2 }}
-        >
-          {exp.company}
-        </h3>
-        {exp.current && (
-          <span
-            className="font-mono"
-            style={{
-              fontSize:    '0.58rem',
-              letterSpacing: '0.14em',
-              textTransform: 'uppercase',
-              padding:     '0.18rem 0.5rem',
-              borderRadius: '5px',
-              background:  'rgba(110,59,91,0.18)',
-              color:       'var(--accent-blush)',
-              border:      '1px solid rgba(216,163,181,0.22)',
-            }}
-          >
-            current
-          </span>
-        )}
-      </div>
-
-      {/* Role */}
-      <p className="font-sans mb-2" style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
-        {exp.title}
-      </p>
-
-      {/* Location */}
-      <div
-        className="flex items-center gap-1 mb-3"
-        style={{ fontSize: '0.72rem', color: 'var(--text-tertiary)' }}
-      >
-        <MapPin size={11} />
-        <span>{exp.location}</span>
-      </div>
-
-      {/* Bullets */}
-      <ul className="space-y-1.5">
-        {exp.bullets.map((b, j) => (
-          <li
-            key={j}
-            className="font-sans pl-3 relative"
-            style={{
-              fontSize:    '0.78rem',
-              color:       'var(--text-secondary)',
-              lineHeight:  1.55,
-            }}
-          >
-            <span
-              className="absolute left-0 top-[0.45em]"
-              style={{ width: '5px', height: '1px', background: 'var(--accent-plum)', display: 'block' }}
-            />
-            {b}
-          </li>
-        ))}
-      </ul>
-    </div>
-  )
-}
-
 export default function Experience() {
+  const [active, setActive] = useState<number>(0)
+
   return (
     <section id="experience" className="py-20 md:py-28">
       <div className="max-w-6xl mx-auto px-6 md:px-8">
@@ -265,7 +92,7 @@ export default function Experience() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.5 }}
-          className="mb-14 md:mb-20"
+          className="mb-12 md:mb-16"
         >
           <p className="section-label mb-4">03 &mdash; Experience</p>
           <h2 className="font-display text-display-lg" style={{ color: 'var(--text-primary)' }}>
@@ -273,67 +100,243 @@ export default function Experience() {
           </h2>
         </motion.div>
 
-        {/* ── Timeline ── */}
-        <div className="relative">
-
-          {/* Animated center line — desktop only */}
-          <motion.div
-            className="hidden lg:block absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-px origin-top"
-            style={{
-              background: 'linear-gradient(to bottom, var(--accent-plum) 0%, var(--border-subtle) 60%, transparent 100%)',
-            }}
-            initial={{ scaleY: 0 }}
-            whileInView={{ scaleY: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
-          />
-
-          {/* Desktop alternating cards */}
-          {experiences.map((exp, i) => (
-            <ExperienceCard key={exp.company} exp={exp} index={i} />
-          ))}
-
-          {/* Mobile cards */}
-          {experiences.map((exp, i) => (
-            <MobileCard key={`m-${exp.company}`} exp={exp} index={i} isLast={i === experiences.length - 1} />
-          ))}
-
-        </div>
-
-        {/* Education */}
+        {/* ── Ledger ── */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true, margin: '-60px' }}
+          transition={{ duration: 0.4 }}
+          style={{ borderTop: '1px solid var(--border-subtle)' }}
+        >
+          {experiences.map((exp, i) => {
+            const isOpen = active === i
+            return (
+              <div
+                key={exp.company}
+                style={{ borderBottom: '1px solid var(--border-subtle)' }}
+              >
+                {/* ── Row header ── */}
+                <button
+                  onClick={() => setActive(isOpen ? -1 : i)}
+                  className="w-full text-left group"
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+                >
+                  <div
+                    className="flex items-center gap-4 md:gap-8 py-5 md:py-6 transition-colors duration-200"
+                    style={{ color: isOpen ? 'var(--text-primary)' : 'var(--text-secondary)' }}
+                  >
+                    {/* Index */}
+                    <span
+                      className="font-mono shrink-0 hidden sm:block"
+                      style={{
+                        fontSize:    '0.6rem',
+                        letterSpacing: '0.18em',
+                        color:       isOpen ? 'var(--accent-blush)' : 'var(--text-tertiary)',
+                        transition:  'color 0.2s',
+                        width:       '1.6rem',
+                      }}
+                    >
+                      {String(i + 1).padStart(2, '0')}
+                    </span>
+
+                    {/* Company + role */}
+                    <div className="flex-1 min-w-0 flex flex-col sm:flex-row sm:items-baseline gap-0.5 sm:gap-4">
+                      <h3
+                        className="font-display font-bold truncate transition-colors duration-200"
+                        style={{
+                          fontSize:  'clamp(1rem, 2.2vw, 1.25rem)',
+                          color:     isOpen ? 'var(--text-primary)' : 'var(--text-secondary)',
+                          flexShrink: 0,
+                        }}
+                      >
+                        {exp.company}
+                      </h3>
+                      <p
+                        className="font-sans hidden md:block truncate"
+                        style={{ fontSize: '0.78rem', color: 'var(--text-tertiary)', flexShrink: 1 }}
+                      >
+                        {exp.title}
+                      </p>
+                    </div>
+
+                    {/* Period + current badge + toggle */}
+                    <div className="flex items-center gap-3 shrink-0">
+                      {exp.current && (
+                        <span className="relative flex h-1.5 w-1.5">
+                          <span
+                            className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-60"
+                            style={{ background: 'var(--accent-blush)' }}
+                          />
+                          <span
+                            className="relative inline-flex rounded-full h-1.5 w-1.5"
+                            style={{ background: 'var(--accent-blush)' }}
+                          />
+                        </span>
+                      )}
+                      <span
+                        className="font-mono hidden sm:block"
+                        style={{ fontSize: '0.68rem', color: 'var(--text-tertiary)', letterSpacing: '0.06em' }}
+                      >
+                        {exp.period}
+                      </span>
+                      <motion.span
+                        animate={{ rotate: isOpen ? 45 : 0 }}
+                        transition={{ duration: 0.25, ease: EASE }}
+                        className="font-mono"
+                        style={{
+                          fontSize:    '1rem',
+                          lineHeight:  1,
+                          color:       isOpen ? 'var(--accent-blush)' : 'var(--text-tertiary)',
+                          display:     'inline-block',
+                          userSelect:  'none',
+                        }}
+                      >
+                        +
+                      </motion.span>
+                    </div>
+                  </div>
+                </button>
+
+                {/* ── Expanded panel ── */}
+                <AnimatePresence initial={false}>
+                  {isOpen && (
+                    <motion.div
+                      key="panel"
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.38, ease: EASE }}
+                      style={{ overflow: 'hidden' }}
+                    >
+                      <div
+                        className="relative pb-8 sm:pl-[calc(1.6rem+2rem)]"
+                        style={{
+                          borderLeft: '2px solid var(--accent-plum)',
+                          marginLeft: '0',
+                          paddingLeft: '20px',
+                          marginBottom: '0',
+                        }}
+                      >
+                        {/* Decorative large number */}
+                        <span
+                          aria-hidden
+                          className="pointer-events-none absolute right-0 top-0 font-display font-black select-none"
+                          style={{
+                            fontSize:   'clamp(5rem, 12vw, 9rem)',
+                            lineHeight: 1,
+                            color:      'rgba(245,241,234,0.025)',
+                            letterSpacing: '-0.04em',
+                          }}
+                        >
+                          {String(i + 1).padStart(2, '0')}
+                        </span>
+
+                        {/* Role (shown here on mobile since hidden in header) */}
+                        <p
+                          className="font-sans md:hidden mb-1"
+                          style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}
+                        >
+                          {exp.title}
+                        </p>
+
+                        {/* Period (mobile only) */}
+                        <p
+                          className="font-mono sm:hidden mb-2"
+                          style={{ fontSize: '0.65rem', color: 'var(--text-tertiary)', letterSpacing: '0.08em' }}
+                        >
+                          {exp.period}
+                        </p>
+
+                        {/* Location */}
+                        <div
+                          className="flex items-center gap-1.5 mb-5"
+                          style={{ fontSize: '0.72rem', color: 'var(--text-tertiary)' }}
+                        >
+                          <MapPin size={11} />
+                          <span className="font-mono" style={{ letterSpacing: '0.06em' }}>
+                            {exp.location}
+                          </span>
+                          {exp.current && (
+                            <span
+                              className="font-mono ml-2"
+                              style={{
+                                fontSize:    '0.58rem',
+                                letterSpacing: '0.14em',
+                                textTransform: 'uppercase',
+                                padding:     '0.15rem 0.45rem',
+                                borderRadius: '4px',
+                                background:  'rgba(110,59,91,0.18)',
+                                color:       'var(--accent-blush)',
+                                border:      '1px solid rgba(216,163,181,0.22)',
+                              }}
+                            >
+                              current
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Bullets */}
+                        <ul className="space-y-3" style={{ maxWidth: '62ch' }}>
+                          {exp.bullets.map((bullet, j) => (
+                            <motion.li
+                              key={j}
+                              initial={{ opacity: 0, x: -12 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ duration: 0.3, delay: 0.08 + j * 0.06, ease: EASE }}
+                              className="font-sans flex gap-3"
+                              style={{ fontSize: '0.83rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}
+                            >
+                              <span
+                                className="shrink-0 mt-[0.55em]"
+                                style={{ width: '4px', height: '4px', borderRadius: '50%', background: 'var(--accent-plum)', display: 'block' }}
+                              />
+                              {bullet}
+                            </motion.li>
+                          ))}
+                        </ul>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            )
+          })}
+        </motion.div>
+
+        {/* ── Education ── */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-40px' }}
-          transition={{ duration: 0.45, delay: 0.1 }}
-          className="mt-12"
+          transition={{ duration: 0.45 }}
+          className="mt-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3"
           style={{
             background:   'var(--bg-card)',
             border:       '1px solid var(--border-subtle)',
-            borderRadius: '14px',
-            padding:      '20px 22px',
+            borderRadius: '12px',
+            padding:      '18px 22px',
           }}
         >
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-            <div className="flex items-start gap-3">
-              <GraduationCap size={18} className="shrink-0 mt-0.5" style={{ color: 'var(--accent-blush)' }} />
-              <div>
-                <h3 className="font-display font-bold" style={{ fontSize: '1.1rem', color: 'var(--text-primary)' }}>
-                  Michigan State University
-                </h3>
-                <p className="font-sans" style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '2px' }}>
-                  B.S. Computer Science &middot; Cognitive Science Minor
-                </p>
+          <div className="flex items-start gap-3">
+            <GraduationCap size={17} className="shrink-0 mt-0.5" style={{ color: 'var(--accent-blush)' }} />
+            <div>
+              <h3 className="font-display font-bold" style={{ fontSize: '1.05rem', color: 'var(--text-primary)' }}>
+                Michigan State University
+              </h3>
+              <p className="font-sans mt-0.5" style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
+                B.S. Computer Science &middot; Cognitive Science Minor
+              </p>
+              <div className="flex items-center gap-1 mt-1" style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)' }}>
+                <MapPin size={10} /><span>East Lansing, MI</span>
               </div>
             </div>
-            <span className="font-mono ml-8 sm:ml-0" style={{ fontSize: '0.72rem', color: 'var(--text-tertiary)', letterSpacing: '0.1em', flexShrink: 0 }}>
-              2022 – 2026
-            </span>
           </div>
-          <div className="flex items-center gap-1 mt-2 ml-[calc(18px+12px)]" style={{ fontSize: '0.72rem', color: 'var(--text-tertiary)' }}>
-            <MapPin size={11} />
-            <span>East Lansing, MI</span>
-          </div>
+          <span
+            className="font-mono shrink-0 sm:ml-4"
+            style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', letterSpacing: '0.1em' }}
+          >
+            2022 – 2026
+          </span>
         </motion.div>
 
       </div>
