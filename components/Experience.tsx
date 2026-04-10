@@ -2,12 +2,32 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import { MapPin, GraduationCap } from 'lucide-react'
 
-const experiences = [
+type Experience = {
+  title:    string
+  company:  string
+  location: string
+  period:   string
+  current?: boolean
+  bullets:  string[]
+}
+
+const experiences: Experience[] = [
+  {
+    title:    'Cloud Integration Intern',
+    company:  'DataHub LLC',
+    location: 'Chicago, IL (Remote)',
+    period:   'Mar 2026 – May 2026',
+    current:  true,
+    bullets: [
+      'Upskilling on Red Hat OpenShift, IBM Cloud, and IBM watsonx.data as part of a structured cloud integration track focused on enterprise deployments.',
+      'Preparing for and completing cloud platform certification exams sponsored by DataHub, with hands-on work in client consulting and presentations.',
+    ],
+  },
   {
     title: 'Software Engineering Intern',
     company: 'IDX Exchange LLC',
     location: 'Remote',
-    period: 'Oct 2025 – Present',
+    period: 'Oct 2025 – Jan 2026',
     bullets: [
       'Built Python + SQL ingestion checks for listing feeds (schema validation, dedupe, null thresholds, idempotent loads), reducing bad records by ~35%.',
       'Implemented feed health KPIs and dashboards (freshness, reject reasons, coverage, deltas), cutting ad hoc investigations by 2–3 hours/week.',
@@ -97,9 +117,23 @@ const Experience = () => (
           >
             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-3">
               <div>
-                <h3 className="font-display text-primary font-bold text-lg leading-tight">
-                  {exp.company}
-                </h3>
+                <div className="flex items-center gap-2.5 flex-wrap">
+                  <h3 className="font-display text-primary font-bold text-lg leading-tight">
+                    {exp.company}
+                  </h3>
+                  {exp.current && (
+                    <span
+                      className="font-mono text-[10px] tracking-[0.14em] uppercase px-2 py-0.5 rounded-sm"
+                      style={{
+                        background: 'rgba(110,59,91,0.18)',
+                        color:      'var(--accent-blush)',
+                        border:     '1px solid rgba(201,160,160,0.22)',
+                      }}
+                    >
+                      current
+                    </span>
+                  )}
+                </div>
                 <p className="text-muted text-sm mt-0.5">{exp.title}</p>
               </div>
               <span className="text-muted text-sm shrink-0 font-mono">
