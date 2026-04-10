@@ -22,44 +22,36 @@ const fadeUp = {
 const About = () => (
   <section id="about" className="py-20 md:py-28">
     <div className="max-w-6xl mx-auto px-6 md:px-8">
-      <motion.div
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: '-80px' }}
-        transition={{ staggerChildren: 0.1 }}
-      >
-        <motion.p variants={fadeUp} className="section-label mb-4">
-          01 &mdash; About
-        </motion.p>
-        <motion.h2
-          variants={fadeUp}
-          className="font-display text-display-lg text-primary mb-10"
-        >
-          About me
-        </motion.h2>
-      </motion.div>
-
       <div className="grid lg:grid-cols-5 gap-10 lg:gap-14">
-        {/* Bio */}
+        {/* Bio — label + heading live here so facts align from the top */}
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-60px' }}
-          transition={{ duration: 0.5, delay: 0.1 }}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ staggerChildren: 0.1 }}
           className="lg:col-span-3"
         >
-          <p className="text-muted text-base leading-relaxed mb-4">
+          <motion.p variants={fadeUp} className="section-label mb-4">
+            01 &mdash; About
+          </motion.p>
+          <motion.h2
+            variants={fadeUp}
+            className="font-display text-display-lg text-primary mb-8"
+          >
+            About me
+          </motion.h2>
+          <motion.p variants={fadeUp} className="text-muted text-base leading-relaxed mb-4">
             Hi! I&apos;m Aayushi ✨ CS senior at Michigan State with a Cognitive
             Science minor, graduating May 2026. I&apos;ve interned in three different
             countries and I still can&apos;t fix my sleep schedule.
-          </p>
-          <p className="text-muted text-base leading-relaxed mb-4">
+          </motion.p>
+          <motion.p variants={fadeUp} className="text-muted text-base leading-relaxed mb-4">
             When I&apos;m not coding, I&apos;m probably on my Animal Crossing island,
             reading something I picked up at 1 AM, or on a walk pretending
             I&apos;m in a music video. 🎵 Always looking for song recs and book
             recs — don&apos;t be shy!
-          </p>
-          <p className="text-muted text-base leading-relaxed">
+          </motion.p>
+          <motion.p variants={fadeUp} className="text-muted text-base leading-relaxed">
             <a
               href="#contact"
               style={{ color: 'var(--accent-blush)', textDecoration: 'none' }}
@@ -68,7 +60,7 @@ const About = () => (
             >
               Say hi anytime →
             </a>
-          </p>
+          </motion.p>
         </motion.div>
 
         {/* Quick Facts */}
@@ -111,3 +103,4 @@ const About = () => (
 )
 
 export default About
+

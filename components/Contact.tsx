@@ -87,65 +87,93 @@ export default function Contact() {
   }
 
   return (
-    <section id="contact" className="py-20">
-      <div style={{ maxWidth: '600px', margin: '0 auto', padding: '0 24px' }}>
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: '-80px' }}
-          transition={{ staggerChildren: 0.1 }}
-          style={{ textAlign: 'center' }}
-        >
+    <section id="contact" className="py-20 md:py-28">
+      <div className="max-w-6xl mx-auto px-6 md:px-8">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
 
-          {/* Section label */}
+          {/* ── Left: label, heading, subtext, social, footer ── */}
           <motion.div
-            variants={fadeUp}
-            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', marginBottom: '20px' }}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ staggerChildren: 0.1 }}
           >
-            <span style={{ display: 'block', width: '28px', height: '1px', background: MAUVE, opacity: 0.55 }} />
-            <span
-              className="font-mono"
-              style={{ fontSize: '0.68rem', letterSpacing: '0.24em', textTransform: 'uppercase', color: MAUVE }}
+            {/* Section label */}
+            <motion.div
+              variants={fadeUp}
+              style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}
             >
-              Contact
-            </span>
+              <span style={{ display: 'block', width: '28px', height: '1px', background: MAUVE, opacity: 0.55 }} />
+              <span
+                className="font-mono"
+                style={{ fontSize: '0.68rem', letterSpacing: '0.24em', textTransform: 'uppercase', color: MAUVE }}
+              >
+                Contact
+              </span>
+            </motion.div>
+
+            {/* Heading */}
+            <motion.h2
+              variants={fadeUp}
+              className="font-display"
+              style={{
+                fontSize:      'clamp(2rem, 4vw, 3rem)',
+                fontWeight:    600,
+                letterSpacing: '-0.03em',
+                color:         'var(--text-primary)',
+                marginBottom:  '16px',
+              }}
+            >
+              Let&apos;s connect! 💌
+            </motion.h2>
+
+            {/* Subtext */}
+            <motion.p
+              variants={fadeUp}
+              style={{
+                fontFamily:   'var(--font-body)',
+                fontSize:     '0.92rem',
+                color:        'var(--text-secondary)',
+                lineHeight:   1.7,
+                marginBottom: '40px',
+              }}
+            >
+              Whether it&apos;s a role, a collab, or just a hello —<br />
+              my inbox is always open.
+            </motion.p>
+
+            {/* Social icons */}
+            <motion.div
+              variants={fadeUp}
+              style={{ display: 'flex', gap: '24px', marginBottom: '48px' }}
+            >
+              <SocialIcon Icon={SiGithub}   href="https://github.com/aayushimalhotra3" />
+              <SocialIcon Icon={FaLinkedin} href="https://www.linkedin.com/in/aayushimalhotraa" />
+              <SocialIcon Icon={MdEmail}    href="mailto:aayushim33@gmail.com" />
+            </motion.div>
+
+            {/* Footer */}
+            <motion.p
+              variants={fadeUp}
+              style={{
+                fontFamily:    'var(--font-mono)',
+                fontSize:      '11px',
+                color:         'var(--text-tertiary)',
+                letterSpacing: '0.06em',
+              }}
+            >
+              designed &amp; built by aayushi malhotra · 2026
+            </motion.p>
           </motion.div>
 
-          {/* Heading */}
-          <motion.h2
-            variants={fadeUp}
-            className="font-display"
-            style={{
-              fontSize:      'clamp(2rem, 5vw, 3rem)',
-              fontWeight:    600,
-              letterSpacing: '-0.03em',
-              color:         'var(--text-primary)',
-              marginBottom:  '16px',
-            }}
-          >
-            Let&apos;s connect! 💌
-          </motion.h2>
-
-          {/* Subtext */}
-          <motion.p
-            variants={fadeUp}
-            style={{
-              fontFamily:   'var(--font-body)',
-              fontSize:     '0.92rem',
-              color:        'var(--text-secondary)',
-              lineHeight:   1.7,
-              marginBottom: '40px',
-            }}
-          >
-            Whether it&apos;s a role, a collab, or just a hello —<br />
-            my inbox is always open.
-          </motion.p>
-
-          {/* Form */}
+          {/* ── Right: form ── */}
           <motion.form
-            variants={fadeUp}
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.55, delay: 0.15 }}
             onSubmit={handleSubmit}
-            style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '36px', textAlign: 'left' }}
+            style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}
           >
             <input
               name="name"
@@ -177,18 +205,18 @@ export default function Contact() {
             <button
               type="submit"
               style={{
-                width:       '100%',
-                background:  MAUVE,
-                color:       '#0a0e1a',
-                border:      'none',
+                width:        '100%',
+                background:   MAUVE,
+                color:        '#0a0e1a',
+                border:       'none',
                 borderRadius: '10px',
-                padding:     '14px',
-                fontFamily:  'var(--font-mono)',
-                fontSize:    '14px',
-                cursor:      'pointer',
-                transition:  'filter 0.2s ease, transform 0.2s ease',
-                filter:      btnHover ? 'brightness(1.1)' : 'brightness(1)',
-                transform:   btnHover ? 'scale(1.01)' : 'scale(1)',
+                padding:      '14px',
+                fontFamily:   'var(--font-mono)',
+                fontSize:     '14px',
+                cursor:       'pointer',
+                transition:   'filter 0.2s ease, transform 0.2s ease',
+                filter:       btnHover ? 'brightness(1.1)' : 'brightness(1)',
+                transform:    btnHover ? 'scale(1.01)' : 'scale(1)',
               }}
               onMouseEnter={() => setBtnHover(true)}
               onMouseLeave={() => setBtnHover(false)}
@@ -197,30 +225,7 @@ export default function Contact() {
             </button>
           </motion.form>
 
-          {/* Social icons */}
-          <motion.div
-            variants={fadeUp}
-            style={{ display: 'flex', justifyContent: 'center', gap: '24px', marginBottom: '32px' }}
-          >
-            <SocialIcon Icon={SiGithub}   href="https://github.com/aayushimalhotra3" />
-            <SocialIcon Icon={FaLinkedin} href="https://www.linkedin.com/in/aayushimalhotraa" />
-            <SocialIcon Icon={MdEmail}    href="mailto:aayushim33@gmail.com" />
-          </motion.div>
-
-          {/* Footer */}
-          <motion.p
-            variants={fadeUp}
-            style={{
-              fontFamily:    'var(--font-mono)',
-              fontSize:      '11px',
-              color:         'var(--text-tertiary)',
-              letterSpacing: '0.06em',
-            }}
-          >
-            designed &amp; built by aayushi malhotra · 2026
-          </motion.p>
-
-        </motion.div>
+        </div>
       </div>
     </section>
   )
