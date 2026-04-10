@@ -167,10 +167,10 @@ function Row({ exp, index }: { exp: Experience; index: number }) {
           whileHover={{ color: 'var(--accent-blush)' }}
           transition={{ duration: 0.22 }}
           style={{
-            fontSize:      'clamp(1.9rem, 4.8vw, 4rem)',
+            fontSize:      'clamp(1.1rem, 2vw, 1.55rem)',
             fontWeight:    700,
-            letterSpacing: '-0.03em',
-            lineHeight:    1,
+            letterSpacing: '-0.01em',
+            lineHeight:    1.15,
           }}
         >
           {exp.company}
@@ -259,7 +259,7 @@ function Row({ exp, index }: { exp: Experience; index: number }) {
                 style={{
                   right:         '-6px',
                   top:           '-10px',
-                  fontSize:      'clamp(6rem, 18vw, 14rem)',
+                  fontSize:      'clamp(5rem, 12vw, 9rem)',
                   lineHeight:    1,
                   color:         'rgba(216,163,181,0.045)',
                   letterSpacing: '-0.04em',
