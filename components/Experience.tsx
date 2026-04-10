@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { MapPin, GraduationCap } from 'lucide-react'
 
 type Experience = {
@@ -80,175 +80,240 @@ const experiences: Experience[] = [
 const EASE = [0.22, 1, 0.36, 1] as const
 
 function Row({ exp, index }: { exp: Experience; index: number }) {
-  const [hovered, setHovered] = useState(false)
+  const [open, setOpen] = useState(exp.current ?? false)
+
+  /* Pull the starting year out of "Mar 2026 – May 2026" → "2026" */
+  const year = exp.period.match(/\d{4}/)?.[0] ?? ''
 
   return (
-    <div
-      style={{ borderTop: '1px solid var(--border-subtle)' }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-    >
-      <div style={{ paddingTop: '26px', paddingBottom: '28px' }}>
+    <div style={{ borderTop: '1px solid var(--border-subtle)' }}>
 
-        {/* ── Company name — curtain reveal ───────────────────── */}
-        <div style={{ overflow: 'hidden', marginBottom: '10px' }}>
-          <motion.h3
-            initial={{ y: '110%' }}
-            whileInView={{ y: 0 }}
-            viewport={{ once: true, margin: '-20px' }}
-            transition={{ duration: 0.7, delay: index * 0.04, ease: EASE }}
-            style={
-              exp.current
-                ? {
-                    /* Filled + cream-to-blush gradient for current */
-                    fontFamily:            'var(--font-display)',
-                    fontSize:              'clamp(1.8rem, 7.5vw, 5.5rem)',
-                    fontWeight:            700,
-                    letterSpacing:         '-0.03em',
-                    lineHeight:            1,
-                    background:            'linear-gradient(110deg, #f5f1ea 0%, #d8a3b5 55%, #c9a0a0 100%)',
-                    WebkitBackgroundClip:  'text',
-                    WebkitTextFillColor:   'transparent',
-                    backgroundClip:        'text',
-                  }
-                : {
-                    /* Outlined stroke — architectural, past */
-                    fontFamily:         'var(--font-display)',
-                    fontSize:           'clamp(1.8rem, 7.5vw, 5.5rem)',
-                    fontWeight:         700,
-                    letterSpacing:      '-0.03em',
-                    lineHeight:         1,
-                    color:              'transparent',
-                    WebkitTextStroke:   hovered
-                                          ? '1.5px rgba(245,241,234,0.72)'
-                                          : '1px rgba(245,241,234,0.22)',
-                    transition:         'all 0.35s ease',
-                  }
-            }
-          >
-            {exp.company}
-          </motion.h3>
-        </div>
-
-        {/* ── Meta row ────────────────────────────────────────── */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.45, delay: 0.12 + index * 0.04 }}
+      {/* ── numbered rule ──────────────────────────────────────────── */}
+      <div
+        style={{
+          display:      'flex',
+          alignItems:   'center',
+          gap:          '14px',
+          paddingTop:   '22px',
+          marginBottom: '10px',
+        }}
+      >
+        <span
+          className="font-mono"
           style={{
-            display:    'flex',
-            flexWrap:   'wrap',
-            alignItems: 'center',
-            gap:        '5px 12px',
-            marginBottom: '12px',
+            fontSize:      '0.58rem',
+            letterSpacing: '0.22em',
+            color:         exp.current ? 'var(--accent-blush)' : 'var(--text-tertiary)',
+            flexShrink:    0,
           }}
         >
-          <span
-            className="font-sans"
-            style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}
-          >
-            {exp.title}
-          </span>
+          {String(index + 1).padStart(2, '0')}
+        </span>
+        <div style={{ flex: 1, height: '1px', background: 'var(--border-subtle)' }} />
+        <span
+          className="font-mono"
+          style={{
+            fontSize:      '0.58rem',
+            letterSpacing: '0.14em',
+            color:         'var(--text-tertiary)',
+            flexShrink:    0,
+          }}
+        >
+          {year}
+        </span>
+      </div>
 
-          <span style={{ color: 'var(--border-medium)', fontSize: '0.6rem' }}>◆</span>
+      {/* ── role label (above company name) ────────────────────────── */}
+      <p
+        className="font-mono"
+        style={{
+          fontSize:      '0.6rem',
+          letterSpacing: '0.24em',
+          textTransform: 'uppercase',
+          color:         exp.current ? 'var(--accent-blush)' : 'var(--text-tertiary)',
+          marginBottom:  '6px',
+          opacity:       exp.current ? 0.9 : 0.7,
+        }}
+      >
+        {exp.title}
+      </p>
 
-          <div
-            style={{
-              display:    'flex',
-              alignItems: 'center',
-              gap:        '3px',
-              color:      'var(--text-tertiary)',
-              fontSize:   '0.72rem',
-            }}
-          >
-            <MapPin size={10} />
-            <span className="font-mono" style={{ letterSpacing: '0.04em' }}>
-              {exp.location}
-            </span>
-          </div>
+      {/* ── company name + toggle ───────────────────────────────────── */}
+      <button
+        onClick={() => setOpen(o => !o)}
+        style={{
+          width:          '100%',
+          background:     'none',
+          border:         'none',
+          padding:        0,
+          cursor:         'pointer',
+          textAlign:      'left',
+          display:        'flex',
+          alignItems:     'baseline',
+          justifyContent: 'space-between',
+          gap:            '16px',
+          marginBottom:   '10px',
+        }}
+      >
+        <motion.h3
+          className="font-display"
+          animate={{
+            color: open
+              ? 'var(--accent-blush)'
+              : exp.current
+                ? 'var(--accent-blush)'
+                : 'var(--text-primary)',
+          }}
+          whileHover={{ color: 'var(--accent-blush)' }}
+          transition={{ duration: 0.22 }}
+          style={{
+            fontSize:      'clamp(1.9rem, 4.8vw, 4rem)',
+            fontWeight:    700,
+            letterSpacing: '-0.03em',
+            lineHeight:    1,
+          }}
+        >
+          {exp.company}
+        </motion.h3>
 
-          <span style={{ color: 'var(--border-medium)', fontSize: '0.6rem' }}>◆</span>
-
-          <span
-            className="font-mono"
-            style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', letterSpacing: '0.06em' }}
-          >
-            {exp.period}
-          </span>
-
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexShrink: 0 }}>
           {exp.current && (
-            <>
-              <span style={{ color: 'var(--border-medium)', fontSize: '0.6rem' }}>◆</span>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span className="relative flex h-1.5 w-1.5">
-                  <span
-                    className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-60"
-                    style={{ background: 'var(--accent-blush)' }}
-                  />
-                  <span
-                    className="relative inline-flex rounded-full h-1.5 w-1.5"
-                    style={{ background: 'var(--accent-blush)' }}
-                  />
-                </span>
-                <span
-                  className="font-mono"
-                  style={{
-                    fontSize:      '0.58rem',
-                    letterSpacing: '0.16em',
-                    textTransform: 'uppercase',
-                    color:         'var(--accent-blush)',
-                  }}
-                >
-                  current
-                </span>
-              </div>
-            </>
-          )}
-        </motion.div>
-
-        {/* ── Bullets ─────────────────────────────────────────── */}
-        <motion.ul
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.2 + index * 0.04 }}
-          style={{
-            display:       'flex',
-            flexDirection: 'column',
-            gap:           '6px',
-            maxWidth:      '72ch',
-          }}
-        >
-          {exp.bullets.map((b, j) => (
-            <li
-              key={j}
-              style={{
-                display:    'flex',
-                gap:        '12px',
-                fontSize:   '0.8rem',
-                color:      'var(--text-tertiary)',
-                lineHeight: 1.6,
-                listStyle:  'none',
-              }}
-            >
+            <span className="relative flex h-1.5 w-1.5">
               <span
+                className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-60"
+                style={{ background: 'var(--accent-blush)' }}
+              />
+              <span
+                className="relative inline-flex rounded-full h-1.5 w-1.5"
+                style={{ background: 'var(--accent-blush)' }}
+              />
+            </span>
+          )}
+          <motion.span
+            animate={{
+              rotate: open ? 45 : 0,
+              color:  open ? 'var(--accent-blush)' : 'var(--text-tertiary)',
+            }}
+            transition={{ duration: 0.25, ease: EASE }}
+            className="font-mono"
+            style={{ fontSize: '1.1rem', lineHeight: 1, display: 'inline-block', userSelect: 'none' }}
+          >
+            +
+          </motion.span>
+        </div>
+      </button>
+
+      {/* ── location · period ───────────────────────────────────────── */}
+      <div
+        style={{
+          display:      'flex',
+          alignItems:   'center',
+          flexWrap:     'wrap',
+          gap:          '6px 10px',
+          marginBottom: open ? '0' : '22px',
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: 'var(--text-tertiary)' }}>
+          <MapPin size={10} />
+          <span className="font-mono" style={{ fontSize: '0.67rem', letterSpacing: '0.06em' }}>
+            {exp.location}
+          </span>
+        </div>
+        <span style={{ color: 'var(--border-medium)', fontSize: '0.55rem' }}>◆</span>
+        <span className="font-mono" style={{ fontSize: '0.67rem', color: 'var(--text-tertiary)', letterSpacing: '0.06em' }}>
+          {exp.period}
+        </span>
+      </div>
+
+      {/* ── expanded panel ──────────────────────────────────────────── */}
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div
+            key="panel"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.38, ease: EASE }}
+            style={{ overflow: 'hidden' }}
+          >
+            <div style={{ position: 'relative', paddingBottom: '26px', marginTop: '14px' }}>
+
+              {/* Drawing gradient underline */}
+              <motion.div
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                exit={{ scaleX: 0 }}
+                transition={{ duration: 0.45, ease: EASE }}
                 style={{
-                  color:      'var(--accent-plum)',
-                  flexShrink: 0,
-                  fontFamily: 'var(--font-mono)',
-                  fontSize:   '0.75rem',
-                  marginTop:  '0.04em',
+                  height:          '1px',
+                  background:      'linear-gradient(to right, var(--accent-plum), var(--accent-blush) 40%, transparent)',
+                  transformOrigin: 'left',
+                  marginBottom:    '22px',
+                }}
+              />
+
+              {/* Ghost initial — decorative depth */}
+              <span
+                aria-hidden
+                className="pointer-events-none select-none font-display font-black absolute"
+                style={{
+                  right:         '-6px',
+                  top:           '-10px',
+                  fontSize:      'clamp(6rem, 18vw, 14rem)',
+                  lineHeight:    1,
+                  color:         'rgba(216,163,181,0.045)',
+                  letterSpacing: '-0.04em',
+                  zIndex:        0,
                 }}
               >
-                —
+                {exp.company.charAt(0)}
               </span>
-              {b}
-            </li>
-          ))}
-        </motion.ul>
 
-      </div>
+              {/* Bullets */}
+              <ul
+                style={{
+                  position:      'relative',
+                  zIndex:        1,
+                  display:       'flex',
+                  flexDirection: 'column',
+                  gap:           '10px',
+                  maxWidth:      '68ch',
+                }}
+              >
+                {exp.bullets.map((b, j) => (
+                  <motion.li
+                    key={j}
+                    initial={{ opacity: 0, x: -12 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.3, delay: 0.07 + j * 0.07, ease: EASE }}
+                    style={{
+                      display:    'flex',
+                      gap:        '12px',
+                      fontSize:   '0.83rem',
+                      color:      'var(--text-secondary)',
+                      lineHeight: 1.65,
+                      listStyle:  'none',
+                    }}
+                  >
+                    <span
+                      style={{
+                        color:      'var(--accent-plum)',
+                        fontFamily: 'var(--font-mono)',
+                        flexShrink: 0,
+                        marginTop:  '0.04em',
+                      }}
+                    >
+                      —
+                    </span>
+                    {b}
+                  </motion.li>
+                ))}
+              </ul>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
     </div>
   )
 }
@@ -273,12 +338,17 @@ export default function Experience() {
         </motion.div>
 
         {/* Rows */}
-        <div>
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true, margin: '-60px' }}
+          transition={{ duration: 0.4 }}
+        >
           {experiences.map((exp, i) => (
             <Row key={exp.company} exp={exp} index={i} />
           ))}
           <div style={{ borderTop: '1px solid var(--border-subtle)' }} />
-        </div>
+        </motion.div>
 
         {/* Education */}
         <motion.div
