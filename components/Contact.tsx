@@ -2,7 +2,8 @@
 
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
-import { SiGithub, SiLinkedin } from 'react-icons/si'
+import { SiGithub } from 'react-icons/si'
+import { FaLinkedin } from 'react-icons/fa'
 import { MdEmail } from 'react-icons/md'
 
 const MAUVE              = '#d4a5b5'
@@ -202,7 +203,7 @@ export default function Contact() {
             style={{ display: 'flex', justifyContent: 'center', gap: '24px', marginBottom: '32px' }}
           >
             <SocialIcon Icon={SiGithub}   href="https://github.com/aayushimalhotra3" />
-            <SocialIcon Icon={SiLinkedin} href="https://www.linkedin.com/in/aayushimalhotraa" />
+            <SocialIcon Icon={FaLinkedin} href="https://www.linkedin.com/in/aayushimalhotraa" />
             <SocialIcon Icon={MdEmail}    href="mailto:aayushim33@gmail.com" />
           </motion.div>
 
