@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { MapPin, GraduationCap } from 'lucide-react'
 
@@ -27,7 +27,7 @@ const experiences: Experience[] = [
   },
   {
     title:    'Software Engineering Intern',
-    company:  'IDX Exchange LLC',
+    company:  'IDX Exchange',
     location: 'Remote',
     period:   'Oct 2025 – Jan 2026',
     bullets: [
@@ -79,134 +79,108 @@ const experiences: Experience[] = [
 
 const EASE = [0.22, 1, 0.36, 1] as const
 
-/* ── Individual card with 3‑D parallax tilt ─────────────────────────── */
-function ExpCard({
-  exp,
-  index,
-  dragging,
-}: {
-  exp:      Experience
-  index:    number
-  dragging: boolean
-}) {
-  const el   = useRef<HTMLDivElement>(null)
-  const raf  = useRef<number>(0)
-  const tilt = useRef({ x: 0, y: 0 })
-  const [tiltState, setTiltState] = useState({ x: 0, y: 0 })
-
-  const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (dragging || !el.current) return
-    const r  = el.current.getBoundingClientRect()
-    const nx = (e.clientX - r.left)  / r.width  - 0.5   // –0.5 → +0.5
-    const ny = (e.clientY - r.top)   / r.height - 0.5
-    tilt.current = { x: ny * -9, y: nx * 9 }
-    cancelAnimationFrame(raf.current)
-    raf.current = requestAnimationFrame(() => setTiltState({ ...tilt.current }))
-  }
-
-  const onLeave = () => {
-    cancelAnimationFrame(raf.current)
-    raf.current = requestAnimationFrame(() => setTiltState({ x: 0, y: 0 }))
-  }
-
-  useEffect(() => () => cancelAnimationFrame(raf.current), [])
-
-  const isWide = exp.current
+function Row({ exp, index }: { exp: Experience; index: number }) {
+  const [hovered, setHovered] = useState(false)
 
   return (
     <div
-      ref={el}
-      onMouseMove={onMove}
-      onMouseLeave={onLeave}
-      style={{
-        flexShrink:      0,
-        width:           isWide ? '360px' : '300px',
-        scrollSnapAlign: 'start',
-        perspective:     '1000px',
-      }}
+      style={{ borderTop: '1px solid var(--border-subtle)' }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
     >
-      <motion.div
-        animate={{ rotateX: tiltState.x, rotateY: tiltState.y, scale: tiltState.x !== 0 || tiltState.y !== 0 ? 1.025 : 1 }}
-        transition={{ type: 'spring', stiffness: 220, damping: 28 }}
-        style={{
-          height:          '100%',
-          display:         'flex',
-          background:      'var(--bg-card)',
-          borderRadius:    '16px',
-          overflow:        'hidden',
-          transformStyle:  'preserve-3d',
-          border:          exp.current
-                             ? '1px solid rgba(216,163,181,0.28)'
-                             : '1px solid var(--border-subtle)',
-          borderTop:       exp.current
-                             ? '2px solid var(--accent-blush)'
-                             : '1px solid var(--border-subtle)',
-          boxShadow:       tiltState.x !== 0 || tiltState.y !== 0
-                             ? '0 28px 70px rgba(0,0,0,0.55), 0 1px 0 rgba(245,241,234,0.06)'
-                             : '0 4px 24px rgba(0,0,0,0.28)',
-          transition:      'box-shadow 0.25s ease, border-color 0.25s ease',
-        }}
-      >
-        {/* ── Spine: vertical company name ─────────────────────── */}
-        <div
+      <div style={{ paddingTop: '26px', paddingBottom: '28px' }}>
+
+        {/* ── Company name — curtain reveal ───────────────────── */}
+        <div style={{ overflow: 'hidden', marginBottom: '10px' }}>
+          <motion.h3
+            initial={{ y: '110%' }}
+            whileInView={{ y: 0 }}
+            viewport={{ once: true, margin: '-20px' }}
+            transition={{ duration: 0.7, delay: index * 0.04, ease: EASE }}
+            style={
+              exp.current
+                ? {
+                    /* Filled + cream-to-blush gradient for current */
+                    fontFamily:            'var(--font-display)',
+                    fontSize:              'clamp(1.8rem, 7.5vw, 5.5rem)',
+                    fontWeight:            700,
+                    letterSpacing:         '-0.03em',
+                    lineHeight:            1,
+                    background:            'linear-gradient(110deg, #f5f1ea 0%, #d8a3b5 55%, #c9a0a0 100%)',
+                    WebkitBackgroundClip:  'text',
+                    WebkitTextFillColor:   'transparent',
+                    backgroundClip:        'text',
+                  }
+                : {
+                    /* Outlined stroke — architectural, past */
+                    fontFamily:         'var(--font-display)',
+                    fontSize:           'clamp(1.8rem, 7.5vw, 5.5rem)',
+                    fontWeight:         700,
+                    letterSpacing:      '-0.03em',
+                    lineHeight:         1,
+                    color:              'transparent',
+                    WebkitTextStroke:   hovered
+                                          ? '1.5px rgba(245,241,234,0.72)'
+                                          : '1px rgba(245,241,234,0.22)',
+                    transition:         'all 0.35s ease',
+                  }
+            }
+          >
+            {exp.company}
+          </motion.h3>
+        </div>
+
+        {/* ── Meta row ────────────────────────────────────────── */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.45, delay: 0.12 + index * 0.04 }}
           style={{
-            width:           '40px',
-            flexShrink:      0,
-            display:         'flex',
-            alignItems:      'center',
-            justifyContent:  'center',
-            background:      'rgba(245,241,234,0.018)',
-            borderRight:     '1px solid var(--border-subtle)',
-            overflow:        'hidden',
-            position:        'relative',
+            display:    'flex',
+            flexWrap:   'wrap',
+            alignItems: 'center',
+            gap:        '5px 12px',
+            marginBottom: '12px',
           }}
         >
           <span
-            style={{
-              position:      'absolute',
-              transform:     'rotate(-90deg)',
-              whiteSpace:    'nowrap',
-              fontFamily:    'var(--font-display)',
-              fontSize:      '0.6rem',
-              fontWeight:    700,
-              letterSpacing: '0.26em',
-              textTransform: 'uppercase',
-              color:         exp.current ? 'rgba(216,163,181,0.55)' : 'rgba(245,241,234,0.2)',
-              userSelect:    'none',
-            }}
+            className="font-sans"
+            style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}
           >
-            {exp.company}
+            {exp.title}
           </span>
-        </div>
 
-        {/* ── Card body ─────────────────────────────────────────── */}
-        <div
-          style={{
-            flex:           1,
-            padding:        '22px 18px',
-            display:        'flex',
-            flexDirection:  'column',
-            minWidth:       0,
-            minHeight:      0,
-          }}
-        >
-          {/* index + period row */}
+          <span style={{ color: 'var(--border-medium)', fontSize: '0.6rem' }}>◆</span>
+
           <div
             style={{
-              display:         'flex',
-              justifyContent:  'space-between',
-              alignItems:      'center',
-              marginBottom:    '18px',
+              display:    'flex',
+              alignItems: 'center',
+              gap:        '3px',
+              color:      'var(--text-tertiary)',
+              fontSize:   '0.72rem',
             }}
           >
-            <span
-              className="font-mono"
-              style={{ fontSize: '0.58rem', letterSpacing: '0.2em', color: 'var(--accent-blush)', opacity: 0.65 }}
-            >
-              {String(index + 1).padStart(2, '0')}
+            <MapPin size={10} />
+            <span className="font-mono" style={{ letterSpacing: '0.04em' }}>
+              {exp.location}
             </span>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
-              {exp.current && (
+          </div>
+
+          <span style={{ color: 'var(--border-medium)', fontSize: '0.6rem' }}>◆</span>
+
+          <span
+            className="font-mono"
+            style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', letterSpacing: '0.06em' }}
+          >
+            {exp.period}
+          </span>
+
+          {exp.current && (
+            <>
+              <span style={{ color: 'var(--border-medium)', fontSize: '0.6rem' }}>◆</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                 <span className="relative flex h-1.5 w-1.5">
                   <span
                     className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-60"
@@ -217,218 +191,94 @@ function ExpCard({
                     style={{ background: 'var(--accent-blush)' }}
                   />
                 </span>
-              )}
-              <span
-                className="font-mono"
-                style={{ fontSize: '0.58rem', color: 'var(--text-tertiary)', letterSpacing: '0.06em' }}
-              >
-                {exp.period}
-              </span>
-            </div>
-          </div>
-
-          {/* Company */}
-          <h3
-            className="font-display"
-            style={{
-              fontSize:      'clamp(0.95rem, 2vw, 1.15rem)',
-              fontWeight:    700,
-              color:         'var(--text-primary)',
-              lineHeight:    1.15,
-              marginBottom:  '5px',
-            }}
-          >
-            {exp.company}
-          </h3>
-
-          {/* Role */}
-          <p
-            className="font-sans"
-            style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginBottom: '4px' }}
-          >
-            {exp.title}
-          </p>
-
-          {/* Location */}
-          <div
-            style={{
-              display:        'flex',
-              alignItems:     'center',
-              gap:            '4px',
-              color:          'var(--text-tertiary)',
-              fontSize:       '0.68rem',
-              marginBottom:   '16px',
-            }}
-          >
-            <MapPin size={10} />
-            <span className="font-mono" style={{ letterSpacing: '0.05em' }}>{exp.location}</span>
-          </div>
-
-          {/* Divider */}
-          <div style={{ height: '1px', background: 'var(--border-subtle)', marginBottom: '14px' }} />
-
-          {/* Bullets */}
-          <ul
-            style={{
-              flex:          1,
-              overflowY:     'hidden',
-              display:       'flex',
-              flexDirection: 'column',
-              gap:           '8px',
-            }}
-          >
-            {exp.bullets.map((b, j) => (
-              <li
-                key={j}
-                style={{
-                  display:    'flex',
-                  gap:        '8px',
-                  fontSize:   '0.74rem',
-                  color:      'var(--text-secondary)',
-                  lineHeight: 1.55,
-                }}
-              >
                 <span
+                  className="font-mono"
                   style={{
-                    width:        '3px',
-                    height:       '3px',
-                    borderRadius: '50%',
-                    background:   'var(--accent-plum)',
-                    flexShrink:   0,
-                    marginTop:    '0.53em',
-                    display:      'block',
+                    fontSize:      '0.58rem',
+                    letterSpacing: '0.16em',
+                    textTransform: 'uppercase',
+                    color:         'var(--accent-blush)',
                   }}
-                />
-                {b}
-              </li>
-            ))}
-          </ul>
+                >
+                  current
+                </span>
+              </div>
+            </>
+          )}
+        </motion.div>
 
-          {exp.current && (
-            <div style={{ paddingTop: '14px' }}>
+        {/* ── Bullets ─────────────────────────────────────────── */}
+        <motion.ul
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.2 + index * 0.04 }}
+          style={{
+            display:       'flex',
+            flexDirection: 'column',
+            gap:           '6px',
+            maxWidth:      '72ch',
+          }}
+        >
+          {exp.bullets.map((b, j) => (
+            <li
+              key={j}
+              style={{
+                display:    'flex',
+                gap:        '12px',
+                fontSize:   '0.8rem',
+                color:      'var(--text-tertiary)',
+                lineHeight: 1.6,
+                listStyle:  'none',
+              }}
+            >
               <span
-                className="font-mono"
                 style={{
-                  fontSize:      '0.56rem',
-                  letterSpacing: '0.14em',
-                  textTransform: 'uppercase',
-                  padding:       '0.18rem 0.48rem',
-                  borderRadius:  '4px',
-                  background:    'rgba(110,59,91,0.18)',
-                  color:         'var(--accent-blush)',
-                  border:        '1px solid rgba(216,163,181,0.22)',
+                  color:      'var(--accent-plum)',
+                  flexShrink: 0,
+                  fontFamily: 'var(--font-mono)',
+                  fontSize:   '0.75rem',
+                  marginTop:  '0.04em',
                 }}
               >
-                current
+                —
               </span>
-            </div>
-          )}
-        </div>
-      </motion.div>
+              {b}
+            </li>
+          ))}
+        </motion.ul>
+
+      </div>
     </div>
   )
 }
 
-/* ── Main section ────────────────────────────────────────────────────── */
 export default function Experience() {
-  const trackRef   = useRef<HTMLDivElement>(null)
-  const [dragging, setDragging] = useState(false)
-  const origin     = useRef({ x: 0, scroll: 0 })
-  const [hint, setHint] = useState(true)
-
-  useEffect(() => {
-    const t = setTimeout(() => setHint(false), 3800)
-    return () => clearTimeout(t)
-  }, [])
-
-  const startDrag = (e: React.MouseEvent) => {
-    if (!trackRef.current) return
-    setDragging(true)
-    origin.current = { x: e.pageX, scroll: trackRef.current.scrollLeft }
-  }
-  const onDrag = (e: React.MouseEvent) => {
-    if (!dragging || !trackRef.current) return
-    e.preventDefault()
-    trackRef.current.scrollLeft = origin.current.scroll - (e.pageX - origin.current.x)
-  }
-  const stopDrag = () => setDragging(false)
-
   return (
     <section id="experience" className="py-20 md:py-28">
       <div className="max-w-6xl mx-auto px-6 md:px-8">
 
         {/* Header */}
-        <div className="flex items-end justify-between mb-10 md:mb-14">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-80px' }}
-            transition={{ duration: 0.5 }}
-          >
-            <p className="section-label mb-4">03 &mdash; Experience</p>
-            <h2 className="font-display text-display-lg" style={{ color: 'var(--text-primary)' }}>
-              Where I&apos;ve worked
-            </h2>
-          </motion.div>
-
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: hint ? 0.45 : 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="font-mono hidden sm:block select-none"
-            style={{ fontSize: '0.6rem', color: 'var(--text-tertiary)', letterSpacing: '0.16em' }}
-          >
-            drag to explore &nbsp;→
-          </motion.p>
-        </div>
-
-        {/* Track wrapper — right-edge fade hint */}
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-60px' }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          style={{ position: 'relative' }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.5 }}
+          className="mb-10 md:mb-14"
         >
-          <div
-            style={{
-              position:      'absolute',
-              right:         0,
-              top:           0,
-              bottom:        0,
-              width:         '72px',
-              background:    'linear-gradient(to right, transparent, var(--bg-primary))',
-              pointerEvents: 'none',
-              zIndex:        2,
-            }}
-          />
-
-          <div
-            ref={trackRef}
-            onMouseDown={startDrag}
-            onMouseMove={onDrag}
-            onMouseUp={stopDrag}
-            onMouseLeave={stopDrag}
-            style={{
-              display:                  'flex',
-              gap:                      '12px',
-              overflowX:                'auto',
-              scrollSnapType:           'x mandatory',
-              cursor:                   dragging ? 'grabbing' : 'grab',
-              userSelect:               'none',
-              scrollbarWidth:           'none',
-              WebkitOverflowScrolling:  'touch',
-              paddingBottom:            '6px',
-            }}
-          >
-            {experiences.map((exp, i) => (
-              <ExpCard key={exp.company} exp={exp} index={i} dragging={dragging} />
-            ))}
-            {/* Spacer so last card doesn't sit under fade */}
-            <div style={{ flexShrink: 0, width: '48px' }} />
-          </div>
+          <p className="section-label mb-4">03 &mdash; Experience</p>
+          <h2 className="font-display text-display-lg" style={{ color: 'var(--text-primary)' }}>
+            Where I&apos;ve worked
+          </h2>
         </motion.div>
+
+        {/* Rows */}
+        <div>
+          {experiences.map((exp, i) => (
+            <Row key={exp.company} exp={exp} index={i} />
+          ))}
+          <div style={{ borderTop: '1px solid var(--border-subtle)' }} />
+        </div>
 
         {/* Education */}
         <motion.div
