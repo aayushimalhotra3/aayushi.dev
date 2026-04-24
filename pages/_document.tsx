@@ -8,15 +8,12 @@ export default function Document() {
         <meta name="robots" content="index, follow" />
         <meta name="author" content="Aayushi Malhotra" />
         <meta property="og:type" content="website" />
-        <meta
-          property="og:site_name"
-          content="Aayushi Malhotra - Software Engineer"
-        />
+        <meta property="og:site_name" content="Aayushi Malhotra - Software Engineer" />
         <meta name="twitter:card" content="summary_large_image" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=IBM+Plex+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono:wght@400;500&display=swap"
           rel="stylesheet"
         />
       </Head>

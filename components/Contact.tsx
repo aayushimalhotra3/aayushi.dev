@@ -6,188 +6,177 @@ import { SiGithub } from 'react-icons/si'
 import { FaLinkedin } from 'react-icons/fa'
 import { MdEmail } from 'react-icons/md'
 
-const BORDER_IDLE  = 'var(--border-subtle)'
-const BORDER_FOCUS = 'var(--border-medium)'
-const FOCUS_GLOW   = '0 0 0 3px rgba(110,59,91,0.18)'
+const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
 
 const fadeUp = {
   hidden:  { opacity: 0, y: 24 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.25, 0.1, 0.25, 1] } },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.25, 0.1, 0.25, 1] as [number,number,number,number] } },
 }
 
-const fieldBase: React.CSSProperties = {
-  width:        '100%',
-  background:   'var(--bg-card)',
-  borderRadius: '10px',
-  padding:      '14px 16px',
-  fontFamily:   'var(--font-body)',
-  fontSize:     '14px',
-  color:        'var(--text-primary)',
-  outline:      'none',
-  transition:   'border-color 0.2s ease, box-shadow 0.2s ease',
-  display:      'block',
-  boxSizing:    'border-box',
-}
-
-function useField() {
-  const [focused, setFocused] = useState(false)
-  return { focused, onFocus: () => setFocused(true), onBlur: () => setFocused(false) }
-}
-
-function focusStyle(focused: boolean): React.CSSProperties {
-  return {
-    border:    `1px solid ${focused ? BORDER_FOCUS : BORDER_IDLE}`,
-    boxShadow: focused ? FOCUS_GLOW : 'none',
-  }
-}
-
-function SocialIcon({ Icon, href }: { Icon: React.ElementType; href: string }) {
+function ContactLink({
+  icon: Icon,
+  href,
+  label,
+}: {
+  icon: React.ElementType
+  href: string
+  label: string
+}) {
   const [hovered, setHovered] = useState(false)
+
   return (
     <a
       href={href}
-      target="_blank"
+      target={href.startsWith('mailto') ? undefined : '_blank'}
       rel="noopener noreferrer"
-      style={{
-        color:      hovered ? 'var(--accent-blush)' : 'var(--text-tertiary)',
-        transform:  hovered ? 'translateY(-2px)' : 'translateY(0)',
-        transition: 'color 0.2s ease, transform 0.2s ease',
-        display:    'inline-flex',
-      }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
+      style={{
+        display:        'flex',
+        alignItems:     'center',
+        gap:            '10px',
+        fontFamily:     '"DM Sans", system-ui, sans-serif',
+        fontSize:       '15px',
+        fontWeight:     500,
+        color:          hovered ? '#ffffff' : 'rgba(242,236,228,0.85)',
+        textDecoration: 'none',
+        transition:     'color 200ms, transform 200ms',
+        transform:      hovered ? 'translateX(4px)' : 'translateX(0)',
+      }}
     >
-      <Icon size={22} />
+      <Icon size={18} />
+      {label}
     </a>
   )
 }
 
 export default function Contact() {
-  const name    = useField()
-  const email   = useField()
-  const message = useField()
-  const [btnHover, setBtnHover] = useState(false)
-
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault()
-    const fd  = new FormData(e.currentTarget)
-    const n   = String(fd.get('name')    ?? '')
-    const em  = String(fd.get('email')   ?? '')
-    const msg = String(fd.get('message') ?? '')
-    window.location.href =
-      `mailto:aayushim33@gmail.com` +
-      `?subject=${encodeURIComponent(`Hey from ${n}`)}` +
-      `&body=${encodeURIComponent(msg)}%0A%0A` +
-      `%E2%80%94%20${encodeURIComponent(n)}%20(${encodeURIComponent(em)})`
-  }
-
   return (
-    <section id="contact" className="py-20 md:py-28">
-      <div className="max-w-6xl mx-auto px-6 md:px-8">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
+    <section
+      id="contact"
+      className="section-plum"
+      style={{ paddingTop: '7rem', paddingBottom: '7rem' }}
+    >
+      <div className="container-inner">
+        <div className="flex flex-col items-center text-center" style={{ maxWidth: '560px', margin: '0 auto' }}>
 
-          {/* ── Left ── */}
+          {/* Kicker */}
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-80px' }}
+            variants={fadeUp}
+            style={{ marginBottom: '1.5rem' }}
+          >
+            <span
+              style={{
+                fontFamily:    '"JetBrains Mono", monospace',
+                fontSize:      '11px',
+                letterSpacing: '0.12em',
+                textTransform: 'uppercase',
+                color:         'rgba(242,236,228,0.6)',
+              }}
+            >
+              05 &mdash; Contact
+            </span>
+          </motion.div>
+
+          {/* Heading */}
+          <motion.h2
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-80px' }}
+            variants={fadeUp}
+            style={{
+              fontFamily:   '"Instrument Serif", Georgia, serif',
+              fontWeight:   400,
+              fontSize:     'clamp(2.5rem, 6vw, 3.5rem)',
+              color:        '#F2ECE4',
+              lineHeight:   1.1,
+              marginBottom: '1.25rem',
+            }}
+          >
+            Let&apos;s <em style={{ fontStyle: 'italic' }}>connect</em>
+          </motion.h2>
+
+          {/* Subtext */}
+          <motion.p
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-80px' }}
+            variants={fadeUp}
+            style={{
+              fontFamily:   '"DM Sans", system-ui, sans-serif',
+              fontSize:     '16px',
+              lineHeight:   1.7,
+              color:        'rgba(242,236,228,0.8)',
+              marginBottom: '2.5rem',
+            }}
+          >
+            Open to full-time SWE, backend, and data engineering roles starting May 2026.
+          </motion.p>
+
+          {/* Links */}
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: '-80px' }}
             transition={{ staggerChildren: 0.1 }}
+            style={{
+              display:        'flex',
+              flexDirection:  'column',
+              alignItems:     'flex-start',
+              gap:            '16px',
+              marginBottom:   '3rem',
+              alignSelf:      'center',
+            }}
           >
-            <motion.p variants={fadeUp} className="section-label mb-4">
-              05 &mdash; Contact
-            </motion.p>
-            <motion.h2
-              variants={fadeUp}
-              className="font-display text-display-lg mb-4"
-              style={{ color: 'var(--text-primary)' }}
-            >
-              Let&apos;s connect! 💌
-            </motion.h2>
-            <motion.p
-              variants={fadeUp}
-              className="font-sans leading-relaxed mb-10"
-              style={{ fontSize: '0.92rem', color: 'var(--text-secondary)' }}
-            >
-              Whether it&apos;s a role, a collab, or just a hello —<br />
-              my inbox is always open.
-            </motion.p>
-
-            <motion.div
-              variants={fadeUp}
-              style={{ display: 'flex', gap: '20px', marginBottom: '48px' }}
-            >
-              <SocialIcon Icon={SiGithub}   href="https://github.com/aayushimalhotra3" />
-              <SocialIcon Icon={FaLinkedin} href="https://www.linkedin.com/in/aayushimalhotraa" />
-              <SocialIcon Icon={MdEmail}    href="mailto:aayushim33@gmail.com" />
+            <motion.div variants={fadeUp}>
+              <ContactLink icon={MdEmail}    href="mailto:aayushim33@gmail.com"                     label="aayushim33@gmail.com" />
             </motion.div>
-
-            <motion.p
-              variants={fadeUp}
-              className="font-mono"
-              style={{ fontSize: '11px', color: 'var(--text-tertiary)', letterSpacing: '0.06em' }}
-            >
-              designed &amp; built by aayushi malhotra · 2026
-            </motion.p>
+            <motion.div variants={fadeUp}>
+              <ContactLink icon={FaLinkedin} href="https://www.linkedin.com/in/aayushimalhotraa"    label="linkedin.com/in/aayushimalhotraa" />
+            </motion.div>
+            <motion.div variants={fadeUp}>
+              <ContactLink icon={SiGithub}   href="https://github.com/aayushimalhotra3"             label="github.com/aayushimalhotra3" />
+            </motion.div>
           </motion.div>
 
-          {/* ── Right: form ── */}
-          <motion.form
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
+          {/* Resume download button */}
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true, margin: '-80px' }}
-            transition={{ duration: 0.55, delay: 0.15 }}
-            onSubmit={handleSubmit}
-            style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}
+            variants={fadeUp}
           >
-            <input
-              name="name"
-              type="text"
-              placeholder="your name"
-              required
-              style={{ ...fieldBase, ...focusStyle(name.focused) }}
-              onFocus={name.onFocus}
-              onBlur={name.onBlur}
-            />
-            <input
-              name="email"
-              type="email"
-              placeholder="your email"
-              required
-              style={{ ...fieldBase, ...focusStyle(email.focused) }}
-              onFocus={email.onFocus}
-              onBlur={email.onBlur}
-            />
-            <textarea
-              name="message"
-              rows={5}
-              placeholder="say something nice :)"
-              required
-              style={{ ...fieldBase, ...focusStyle(message.focused), resize: 'vertical' }}
-              onFocus={message.onFocus}
-              onBlur={message.onBlur}
-            />
-            <button
-              type="submit"
+            <a
+              href="/Aayushi_Malhotra_Resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
               style={{
-                width:        '100%',
-                background:   btnHover ? 'var(--accent-plum-light)' : 'var(--accent-plum)',
-                color:        'var(--text-primary)',
-                border:       'none',
-                borderRadius: '10px',
-                padding:      '14px',
-                fontFamily:   'var(--font-mono)',
-                fontSize:     '13px',
-                letterSpacing: '0.06em',
-                cursor:       'pointer',
-                transition:   'background 0.2s ease, transform 0.2s ease',
-                transform:    btnHover ? 'translateY(-1px)' : 'translateY(0)',
+                fontFamily:      '"DM Sans", system-ui, sans-serif',
+                fontSize:        '14px',
+                fontWeight:      500,
+                color:           '#8B5C7A',
+                backgroundColor: '#F2ECE4',
+                borderRadius:    '24px',
+                padding:         '12px 32px',
+                textDecoration:  'none',
+                display:         'inline-block',
+                transition:      'background 220ms, transform 220ms',
               }}
-              onMouseEnter={() => setBtnHover(true)}
-              onMouseLeave={() => setBtnHover(false)}
+              onMouseEnter={e => {
+                e.currentTarget.style.backgroundColor = '#ffffff'
+                e.currentTarget.style.transform = 'scale(1.02)'
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.backgroundColor = '#F2ECE4'
+                e.currentTarget.style.transform = 'scale(1)'
+              }}
             >
-              send it ✨
-            </button>
-          </motion.form>
+              Download Resume &#8599;
+            </a>
+          </motion.div>
 
         </div>
       </div>

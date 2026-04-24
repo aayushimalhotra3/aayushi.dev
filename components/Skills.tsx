@@ -1,236 +1,182 @@
 'use client'
-import React, { useEffect, useRef } from 'react'
+
+import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 
-const SKILLS = [
-  'Python', 'TypeScript', 'Go', 'Java', 'C++', 'SQL', 'Bash',
-  'FastAPI', 'React', 'Next.js', 'Flask', 'PySpark', 'Streamlit',
-  'PostgreSQL', 'MySQL', 'MongoDB', 'Redis',
-  'GCP', 'AWS', 'Docker', 'Kubernetes', 'Terraform',
-  'Git', 'CI/CD', 'Prometheus', 'Pandas', 'Jupyter', 'Linux',
-  'Apache Beam', 'GCP Dataflow',
-] as const
+const COLUMNS = [
+  {
+    header: 'I WRITE',
+    skills: [
+      { name: 'Python',     size: '1.8rem' },
+      { name: 'TypeScript', size: '1.4rem' },
+      { name: 'SQL',        size: '1.4rem' },
+      { name: 'Go',         size: '1.2rem' },
+      { name: 'Java',       size: '1.2rem' },
+      { name: 'C++',        size: '1rem'   },
+      { name: 'Bash',       size: '0.95rem' },
+    ],
+  },
+  {
+    header: 'I BUILD WITH',
+    skills: [
+      { name: 'FastAPI',      size: '1.8rem' },
+      { name: 'React',        size: '1.4rem' },
+      { name: 'Next.js',      size: '1.4rem' },
+      { name: 'PySpark',      size: '1.2rem' },
+      { name: 'Apache Beam',  size: '1.2rem' },
+      { name: 'Flask',        size: '1rem'   },
+      { name: 'Streamlit',    size: '0.95rem' },
+    ],
+  },
+  {
+    header: 'I DEPLOY ON',
+    skills: [
+      { name: 'GCP',        size: '1.8rem' },
+      { name: 'AWS',        size: '1.4rem' },
+      { name: 'Docker',     size: '1.4rem' },
+      { name: 'Kubernetes', size: '1.2rem' },
+      { name: 'PostgreSQL', size: '1.2rem' },
+      { name: 'Terraform',  size: '1rem'   },
+      { name: 'Redis',      size: '0.95rem' },
+    ],
+  },
+]
 
-/* Fibonacci sphere — evenly distributes N points on a unit sphere */
-function fibSphere(n: number): ReadonlyArray<readonly [number, number, number]> {
-  const φ = (1 + Math.sqrt(5)) / 2
-  return Array.from({ length: n }, (_, i) => {
-    const θ = (2 * Math.PI * i) / φ
-    const ψ = Math.acos(1 - (2 * (i + 0.5)) / n)
-    return [
-      Math.sin(ψ) * Math.cos(θ),
-      Math.sin(ψ) * Math.sin(θ),
-      Math.cos(ψ),
-    ] as const
-  })
-}
+const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
 
-const BASE = fibSphere(SKILLS.length)
+function SkillItem({ name, size, delay }: { name: string; size: string; delay: number }) {
+  const [hovered, setHovered] = useState(false)
 
-/* Rotate a point around Y then X */
-function rotate(
-  x: number, y: number, z: number,
-  rx: number, ry: number,
-): readonly [number, number, number] {
-  const cY = Math.cos(ry), sY = Math.sin(ry)
-  const x1 = x * cY + z * sY
-  const z1 = -x * sY + z * cY
-  const cX = Math.cos(rx), sX = Math.sin(rx)
-  const y2 = y * cX - z1 * sX
-  const z2 = y * sX + z1 * cX
-  return [x1, y2, z2]
+  return (
+    <motion.span
+      initial={{ opacity: 0, y: 12 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.4, delay, ease: EASE }}
+      onHoverStart={() => setHovered(true)}
+      onHoverEnd={() => setHovered(false)}
+      style={{
+        display:       'block',
+        fontFamily:    '"Instrument Serif", Georgia, serif',
+        fontWeight:    400,
+        fontSize:      size,
+        lineHeight:    1.3,
+        color:         hovered ? '#8B5C7A' : '#F2ECE4',
+        transition:    'color 200ms',
+        cursor:        'default',
+        paddingBottom: '4px',
+        borderBottom:  hovered ? '1px solid #8B5C7A' : '1px solid transparent',
+      }}
+    >
+      {name}
+    </motion.span>
+  )
 }
 
 export default function Skills() {
-  const wrapRef   = useRef<HTMLDivElement>(null)
-  const ringRef   = useRef<SVGEllipseElement>(null)
-  const mouse     = useRef({ x: 0, y: 0, inside: false })
-  const rot       = useRef({ x: 0.35, y: 0 })
-  const vel       = useRef({ x: 0, y: 0.004 })
-  const ringAngle = useRef(0)
-
-  useEffect(() => {
-    const wrap = wrapRef.current
-    if (!wrap) return
-
-    const spans = Array.from(wrap.querySelectorAll<HTMLElement>('[data-skill]'))
-    const R = (wrap as HTMLDivElement).offsetWidth < 520 ? 145 : 200
-    let raf: number
-
-    function tick() {
-      /* ── velocity update ── */
-      if (mouse.current.inside && wrap) {
-        const rect = wrap.getBoundingClientRect()
-        const mx = (mouse.current.x - rect.left  - rect.width  / 2) / rect.width
-        const my = (mouse.current.y - rect.top   - rect.height / 2) / rect.height
-        vel.current.y = vel.current.y * 0.94 + mx * 0.007
-        vel.current.x = vel.current.x * 0.94 + my * 0.004
-        /* hard cap */
-        vel.current.y = Math.max(-0.010, Math.min(0.010, vel.current.y))
-        vel.current.x = Math.max(-0.007, Math.min(0.007, vel.current.x))
-      } else {
-        /* gentle auto-rotation */
-        vel.current.y = vel.current.y * 0.98 + 0.0025 * 0.02
-        vel.current.x *= 0.98
-      }
-
-      rot.current.x += vel.current.x
-      rot.current.y += vel.current.y
-      ringAngle.current += 0.006
-
-      /* ── update orbit ring ── */
-      if (ringRef.current) {
-        ringRef.current.setAttribute(
-          'transform',
-          `rotate(${(ringAngle.current * 180) / Math.PI} 50 50)`,
-        )
-      }
-
-      /* ── update skill spans ── */
-      spans.forEach((el, i) => {
-        const [px, py, pz] = BASE[i]
-        const [rx, ry, rz] = rotate(px, py, pz, rot.current.x, rot.current.y)
-
-        const scale   = (rz + 2) / 3                       // 0.33 → 1.0
-        const opacity = Math.max(0.08, (rz + 1.35) / 2.35) // 0.08 → 1.0
-        const tx      = rx * R
-        const ty      = ry * R
-
-        el.style.transform  = `translate(-50%,-50%) translate(${tx.toFixed(1)}px,${ty.toFixed(1)}px)`
-        el.style.opacity    = opacity.toFixed(3)
-        el.style.fontSize   = `${(0.58 + scale * 0.6).toFixed(3)}rem`
-        el.style.fontWeight = rz > 0.35 ? '600' : '400'
-        el.style.color      = rz > 0.55 ? '#c9a0a0'
-                            : rz > 0.05 ? '#f5f1ea'
-                            : '#9b928a'
-        el.style.zIndex     = String(Math.round(rz * 100 + 100))
-        el.style.textShadow = rz > 0.5
-          ? '0 0 18px rgba(201,160,160,0.35)'
-          : 'none'
-      })
-
-      raf = requestAnimationFrame(tick)
-    }
-
-    raf = requestAnimationFrame(tick)
-
-    const onMove  = (e: MouseEvent) => { mouse.current.x = e.clientX; mouse.current.y = e.clientY }
-    const onEnter = () => { mouse.current.inside = true  }
-    const onLeave = () => { mouse.current.inside = false }
-
-    wrap.addEventListener('mousemove',  onMove)
-    wrap.addEventListener('mouseenter', onEnter)
-    wrap.addEventListener('mouseleave', onLeave)
-
-    return () => {
-      cancelAnimationFrame(raf)
-      wrap.removeEventListener('mousemove',  onMove)
-      wrap.removeEventListener('mouseenter', onEnter)
-      wrap.removeEventListener('mouseleave', onLeave)
-    }
-  }, [])
-
   return (
-    <section id="skills" className="py-20 md:py-28 overflow-hidden">
-      <div className="max-w-6xl mx-auto px-6 md:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.5fr] gap-8 lg:gap-12 items-center">
+    <section
+      id="skills"
+      className="section-dark"
+      style={{ paddingTop: '6rem', paddingBottom: '6rem' }}
+    >
+      <div className="container-inner">
 
-          {/* ── Left: header ── */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: '-80px' }}
-            transition={{ duration: 0.6 }}
+        {/* Kicker */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.5 }}
+          style={{ marginBottom: '2.5rem' }}
+        >
+          <span
+            style={{
+              fontFamily:    '"JetBrains Mono", monospace',
+              fontSize:      '11px',
+              letterSpacing: '0.12em',
+              textTransform: 'uppercase',
+              color:         '#A69B8E',
+              display:       'inline-flex',
+              alignItems:    'center',
+              gap:           '8px',
+            }}
           >
-            <p className="section-label mb-4">04 &mdash; Skills</p>
-            <h2
-              className="font-display text-display-lg mb-6"
-              style={{ color: 'var(--text-primary)' }}
-            >
-              What I<br />build with
-            </h2>
-            <p
-              className="font-sans leading-relaxed mb-8"
-              style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', maxWidth: '28ch' }}
-            >
-              Languages, frameworks, infra, and tools I reach for day-to-day.
-            </p>
-            <motion.p
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 1.2, duration: 0.8 }}
-              aria-hidden
-              className="font-mono"
-              style={{ fontSize: '0.56rem', letterSpacing: '0.22em', color: 'var(--text-tertiary)', opacity: 0.55 }}
-            >
-              [ drag to rotate ]
-            </motion.p>
-          </motion.div>
+            <span style={{ color: '#C4A86B' }}>04</span>
+            <span style={{ width: '32px', height: '1px', backgroundColor: '#C4A86B', display: 'inline-block' }} />
+            Skills
+          </span>
+        </motion.div>
 
-          {/* ── Right: sphere ── */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.9, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-            className="relative"
-          >
-            {/* Plum radial glow */}
+        {/* Heading */}
+        <motion.h2
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          style={{
+            fontFamily:   '"Instrument Serif", Georgia, serif',
+            fontWeight:   400,
+            fontSize:     'clamp(2.25rem, 5vw, 3.25rem)',
+            color:        '#F2ECE4',
+            marginBottom: '3.5rem',
+            lineHeight:   1.1,
+          }}
+        >
+          Tools of the <em style={{ fontStyle: 'italic' }}>trade</em>
+        </motion.h2>
+
+        {/* Three-column magazine layout */}
+        <div
+          style={{
+            display:             'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+            gap:                 '0',
+            position:            'relative',
+          }}
+        >
+          {COLUMNS.map((col, ci) => (
             <div
-              aria-hidden
-              className="pointer-events-none absolute inset-0"
+              key={col.header}
               style={{
-                background: 'radial-gradient(ellipse 65% 60% at 50% 50%, rgba(110,59,91,0.18) 0%, transparent 70%)',
+                padding:     '0 2rem',
+                borderLeft:  ci === 0 ? 'none' : '1px solid rgba(196,168,107,0.2)',
+                paddingLeft: ci === 0 ? '0' : '2rem',
               }}
-            />
-
-            {/* Orbit ring */}
-            <svg
-              aria-hidden
-              className="pointer-events-none absolute inset-0 w-full h-full"
-              viewBox="0 0 100 100"
-              fill="none"
             >
-              <ellipse
-                ref={ringRef}
-                cx="50" cy="50"
-                rx="38" ry="11"
-                stroke="rgba(201,160,160,0.1)"
-                strokeWidth="0.4"
-                strokeDasharray="2 3"
-              />
-            </svg>
+              {/* Column header */}
+              <motion.p
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: ci * 0.1 }}
+                style={{
+                  fontFamily:    '"JetBrains Mono", monospace',
+                  fontSize:      '10px',
+                  letterSpacing: '0.18em',
+                  textTransform: 'uppercase',
+                  color:         '#C4A86B',
+                  marginBottom:  '1.5rem',
+                }}
+              >
+                {col.header}
+              </motion.p>
 
-            {/* Sphere */}
-            <div
-              ref={wrapRef}
-              className="relative mx-auto cursor-move"
-              style={{ height: '360px' }}
-            >
-              {SKILLS.map((skill, i) => (
-                <span
-                  key={skill}
-                  data-skill={i}
-                  className="absolute font-sans pointer-events-none whitespace-nowrap"
-                  style={{
-                    left:          '50%',
-                    top:           '50%',
-                    transform:     'translate(-50%,-50%)',
-                    fontSize:      '0.85rem',
-                    color:         '#f5f1ea',
-                    opacity:       0,
-                    letterSpacing: '0.015em',
-                    willChange:    'transform, opacity, font-size',
-                  }}
-                >
-                  {skill}
-                </span>
-              ))}
+              {/* Skills list */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                {col.skills.map((s, si) => (
+                  <SkillItem
+                    key={s.name}
+                    name={s.name}
+                    size={s.size}
+                    delay={ci * 0.08 + si * 0.05}
+                  />
+                ))}
+              </div>
             </div>
-          </motion.div>
-
+          ))}
         </div>
+
       </div>
     </section>
   )

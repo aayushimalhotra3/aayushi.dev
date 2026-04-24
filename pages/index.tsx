@@ -2,6 +2,7 @@ import React from 'react'
 import Head from 'next/head'
 import Navigation from '@/components/Navigation'
 import Hero from '@/components/Hero'
+import Marquee from '@/components/Marquee'
 import About from '@/components/About'
 import Projects from '@/components/Projects'
 import Experience from '@/components/Experience'
@@ -25,10 +26,7 @@ export default function Home() {
         <meta name="author" content="Aayushi Malhotra" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://aayushidev.vercel.app/" />
-        <meta
-          property="og:title"
-          content="Aayushi Malhotra &mdash; Software Engineer"
-        />
+        <meta property="og:title" content="Aayushi Malhotra &mdash; Software Engineer" />
         <meta
           property="og:description"
           content="Software Engineer graduating May 2026. Building data pipelines, backend systems, and cloud infrastructure."
@@ -41,15 +39,24 @@ export default function Home() {
 
       <Navigation />
 
-      <main className="bg-bg">
+      <main>
+        {/* DARK */}
         <Hero />
+        {/* PLUM — marquee accent band */}
+        <Marquee />
+        {/* WARM CREAM */}
         <About />
+        {/* DARK */}
         <Projects />
+        {/* WARM CREAM */}
         <Experience />
+        {/* DARK */}
         <Skills />
+        {/* PLUM — contact accent band */}
         <Contact />
       </main>
 
+      {/* DARK */}
       <Footer />
     </>
   )

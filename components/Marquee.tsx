@@ -1,9 +1,8 @@
 import React from 'react'
 
 const techs = [
-  'Python', 'FastAPI', 'GCP', 'Docker', 'PostgreSQL', 'React',
-  'TypeScript', 'Kubernetes', 'Apache Beam', 'AWS', 'PySpark',
-  'Go', 'Terraform', 'SQL', 'Next.js',
+  'Python', 'FastAPI', 'GCP', 'Docker', 'PostgreSQL', 'Kubernetes',
+  'TypeScript', 'Apache Beam', 'AWS', 'PySpark', 'React', 'SQL',
 ]
 
 const Marquee = () => {
@@ -11,23 +10,32 @@ const Marquee = () => {
 
   return (
     <div
-      className="relative overflow-hidden border-y py-4"
-      style={{ borderColor: 'var(--border-subtle)', backgroundColor: 'var(--bg-secondary)' }}
+      style={{
+        backgroundColor: '#8B5C7A',
+        paddingTop:      '16px',
+        paddingBottom:   '16px',
+        overflow:        'hidden',
+        position:        'relative',
+      }}
     >
-      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-20"
-        style={{ background: 'linear-gradient(to right, var(--bg-secondary), transparent)' }} />
-      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-20"
-        style={{ background: 'linear-gradient(to left, var(--bg-secondary), transparent)' }} />
-
-      <div className="animate-marquee flex w-max items-center gap-10 whitespace-nowrap">
+      <div className="marquee-track" style={{ display: 'flex', alignItems: 'center', gap: '3rem' }}>
         {items.map((tech, i) => (
           <span
             key={`${tech}-${i}`}
-            className="flex items-center gap-3 font-ibm text-[10px] tracking-[0.18em] uppercase"
-            style={{ color: 'var(--text-tertiary)' }}
+            style={{
+              fontFamily:    '"JetBrains Mono", monospace',
+              fontSize:      '13px',
+              letterSpacing: '0.1em',
+              textTransform: 'uppercase',
+              color:         '#F2ECE4',
+              whiteSpace:    'nowrap',
+              display:       'flex',
+              alignItems:    'center',
+              gap:           '1rem',
+            }}
           >
-            <span style={{ color: '#c9a0a0', opacity: 0.5, fontSize: '8px' }}>◆</span>
             {tech}
+            <span style={{ color: 'rgba(242,236,228,0.4)', fontSize: '6px' }}>&#9670;</span>
           </span>
         ))}
       </div>
